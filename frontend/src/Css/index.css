@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bodyBack: #252726;
+  --bodyBorder: #505050;
+  --content: #457b9d;
+  --buttonHover: #2ba1eb;
+  --navBack: #1d3557;
+  --navIconBack: #225270;
+  --fontColor: #ffffff;
+
+  --navWidth: 280px;
+}
+
+/*---------------------------------------------------------------------------------------
+Általános beállítások
+---------------------------------------------------------------------------------------*/
+
+body {
+  /*
+  background-color: var(--bodyBack);
+  color: var(--fontColor);
+  */
+}
+main {
+  display: flex;
+  flex-direction: column;
+  min-height: 93.2vh;
+}
+main > div {
+  flex-grow: 1;
+}
+
+/*---------------------------------------------------------------------------------------
+Content
+---------------------------------------------------------------------------------------*/
+input,
+textarea {
+  width: 100%;
+  border: 1px solid gray;
+  border-radius: 6px;
+  color: black;
+}
+/*---------------------------------------------------------------------------------------
+Navbar
+---------------------------------------------------------------------------------------*/
+
+/*---------------------------------------------------------------------------------------
+Content
+---------------------------------------------------------------------------------------*/
+.img-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+/*---------------------------------------------------------------------------------------
+Inputok / Gombok
+---------------------------------------------------------------------------------------*/
+
+/*---------------------------------------------------------------------------------------
+Footer
+---------------------------------------------------------------------------------------*/
+
+/*---------------------------------------------------------------------------------------
+Töréspontok
+---------------------------------------------------------------------------------------*/
+@media (max-width: 279px) {
+  /* Kisebb képernyők */
+  /* CSS szabályok itt */
+  * {
+    display: none;
+  }
+}
+
+@media (max-width: 340px) {
+  .w-80 {
+    max-width: 90%;
+  }
+}
+@media (max-width: 639px) {
+  /* Kisebb képernyők */
+  /* CSS szabályok itt */
+}
+
+@media (max-width: 767px) {
+  /* Közepes méretű képernyők és annál kisebbek */
+  /* CSS szabályok itt */
+}
+
+@media (max-width: 1023px) {
+  /* Nagyobb képernyők és annál kisebbek */
+  /* CSS szabályok itt */
+}
+
+@media (max-width: 1279px) {
+  /* Nagy méretű képernyők és annál kisebbek */
+  /* CSS szabályok itt */
+}
+
+@media (max-width: 1535px) {
+  /* Nagy méretű képernyők, például asztali monitorok és annál kisebbek */
+  /* CSS szabályok itt */
+}

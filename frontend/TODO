@@ -1,0 +1,27 @@
+Ehez a projekthez:
+Interaktív funkciók irása, pl: DragAndDrop,
+!!!!!!!!!! megodlani hogy ha a kezdőodlalra mennek (/autokolcsonzes) akkor arra töltse be az autókat,
+vagy a / ről irányítsa át a webodlal a /főoldalra !!!!!!!!! (a képek töltődjenek be ilyenkor)
+ERRE a problémára Erik megoldása:
+"berakod, hogy ha a változó értéke null akkor töltőképernyő, ha true akkor beenged az oldalra, ha flse akkor visszadob egy másikra"
+ez az outhprotection ba meg ilyenbe
+képek az img mappába 1 és 2 néven
+
+
+esetleg lefordítani az egész app ot angolra, vagy valahogyan autómatikusan lefordítani angolra ??
+
+a pénz kiírását valahogy frissíteni, mert nem néz ki jól 
+
+
+autók aktivitása, hogy aktívak e vagy sem,
+
+rendelések elmentése, hogy visszanézhető legyen (keresés megvalósítás, idő szerint is)
+a dátum kiírásra keresni valami jó megoldást
+
+
+figyelni arra hogy full reszponzív legyen
+
+
+Tervek backend el: (NextJs)
+regisztráció
+profil és beállítások elkészítése (profilkép, jelszó válltás stb.)
