@@ -12,16 +12,17 @@ esetleg lefordítani az egész app ot angolra, vagy valahogyan autómatikusan le
 
 a pénz kiírását valahogy frissíteni, mert nem néz ki jól 
 
-
 autók aktivitása, hogy aktívak e vagy sem,
 
 rendelések elmentése, hogy visszanézhető legyen (keresés megvalósítás, idő szerint is)
 a dátum kiírásra keresni valami jó megoldást
 
-
 figyelni arra hogy full reszponzív legyen
 
 
 Tervek backend el: (NextJs)
+
+Az egy autó oldal betöltés valamiért újra tölti az egész weboldalt!!! Megoldani !!!
+
 regisztráció
 profil és beállítások elkészítése (profilkép, jelszó válltás stb.)
