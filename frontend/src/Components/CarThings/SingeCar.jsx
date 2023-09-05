@@ -14,6 +14,8 @@ function SingleCar(props) {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [content, setContent] = useState("");
   const [wantToDeleteCar, setWantToDeleteCar] = useState(-1);
+
+  const [car, SetCar] = useState([]);
   const handleOpenModal = () => {
     setModalOpen(true);
   };
@@ -22,12 +24,68 @@ function SingleCar(props) {
     setModalOpen(false);
   };
 
-  const getItemById = (id) => {
-    const storedCars = JSON.parse(localStorage.getItem("cars"));
-    const oneCar = storedCars.filter((storedCar) => storedCar.id === id)[0];
+  const getItemById = async (id) => {
+    const storedCar = await fetch(
+      import.meta.env.VITE_API_URL + `/home/getCar/${id}`,
+      {
+        method: "GET",
+      }
+    )
+      .then((response) => {
+        return response.json();
+      })
 
-    return oneCar;
+      .catch((error) => {
+        console.error("Hiba történt:", error);
+      });
+
+    return storedCar;
   };
+
+  useEffect(() => {
+    const fetchCarData = async () => {
+      const fetchedCar = await getItemById(id);
+
+      if (fetchedCar.Rented) {
+        navitage("/autoKolcsonzes/Főoldal");
+      } else {
+        //console.log(fetchedCar);
+        SetCar(fetchedCar);
+      }
+    };
+
+    fetchCarData();
+  }, [id]);
+  const inputs = [
+    {
+      név: "Név",
+      name: "Name",
+      placeholder: "Az autó neve",
+      type: "text",
+      defaultValue: car.Name,
+    },
+    {
+      név: "Ára /óra(csak szám)",
+      name: "Value",
+      placeholder: "Az autó ára forintban értve",
+      type: "number",
+      defaultValue: car.Value,
+    },
+    {
+      név: "Leírás",
+      name: "Description",
+      placeholder: "Az autó leírása",
+      type: "text",
+      defaultValue: car.Description,
+    },
+    {
+      név: "Kép (URL)",
+      name: "Image",
+      placeholder: "Az autó képe",
+      type: "text",
+      defaultValue: car.Image,
+    },
+  ];
 
   const deleteCarById = (id) => {
     if (!authC.isAdmin()) navitage("/Főoldal");
@@ -77,53 +135,6 @@ function SingleCar(props) {
 
   //IDE KELL MAJD USEEFFECT FÖLLÜLRE
 
-  const oneCar = getItemById(id);
-  const [car, SetCar] = useState(null);
-  useEffect(() => {
-    if (oneCar.kiBereltE) {
-      navitage("/autoKolcsonzes/Főoldal");
-    } else {
-      SetCar({
-        id: parseInt(oneCar.id),
-        név: oneCar.név,
-        ára: parseInt(oneCar.ára),
-        leírás: oneCar.leírás,
-        kép: oneCar.kép,
-        kiBereltE: oneCar.kiBereltE,
-      });
-    }
-  }, []);
-
-  const inputs = [
-    {
-      név: "Név",
-      name: "név",
-      placeholder: "Az autó neve",
-      type: "text",
-      defaultValue: oneCar.név,
-    },
-    {
-      név: "Ára /óra(csak szám)",
-      name: "ára",
-      placeholder: "Az autó ára forintban értve",
-      type: "number",
-      defaultValue: oneCar.ára,
-    },
-    {
-      név: "Leírás",
-      name: "leírás",
-      placeholder: "Az autó leírása",
-      type: "text",
-      defaultValue: oneCar.leírás,
-    },
-    {
-      név: "Kép (URL)",
-      name: "kép",
-      placeholder: "Az autó képe",
-      type: "text",
-      defaultValue: oneCar.kép,
-    },
-  ];
   const handleChange = (e) => {
     SetCar((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -171,7 +182,7 @@ function SingleCar(props) {
 
   return (
     <>
-      <div key={oneCar.id} className="w-5/6 m-auto">
+      <div key={car.ID} className="w-5/6 m-auto">
         <div className="border-b border-gray-900/10 pb-12">
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 ">
             {inputs.map((input) => (
@@ -179,7 +190,7 @@ function SingleCar(props) {
                 <label className="block text-sm font-medium leading-6 ">
                   {input.név}
                 </label>
-                {input.name === "leírás" ? (
+                {input.name === "Description" ? (
                   <textarea
                     type={input.type}
                     name={input.name}
@@ -206,8 +217,8 @@ function SingleCar(props) {
             ))}
             <button onClick={handleOpenModal}>
               <img
-                src={oneCar.kép}
-                alt={oneCar.név}
+                src={car.Image}
+                alt={car.Name}
                 className="w-96 m-auto cursor-pointer"
               />
             </button>
@@ -265,8 +276,8 @@ function SingleCar(props) {
                 Bezárás
               </button>
               <img
-                src={oneCar.kép}
-                alt={oneCar.név}
+                src={car.Image}
+                alt={car.Name}
                 className="w-full"
                 onClick={handleCloseModal}
               />

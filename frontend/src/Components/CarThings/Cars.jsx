@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { AuthCont } from "../Services/AuthContext";
 
 const Cars = ({ searchText }) => {
   //throw Promise.resolve("test");
-  const [loading, setLoading] = useState(true);
+
   const [cars, setCars] = useState([]);
+  const authC = useContext(AuthCont);
   async function getCars() {
     const random = Math.floor(Math.random() * 5 + 1) * 1000;
     //await new Promise((resolve) => setTimeout(resolve, random));
 
-    await fetch(
-      "http://localhost:" + import.meta.env.VITE_PORT + "/auth/teszt",
-      {
-        method: "GET",
-      }
-    )
+    await fetch(import.meta.env.VITE_API_URL + "/home/getCars", {
+      method: "GET",
+    })
       .then((response) => {
         // Ellenőrizd a választ, hogy biztosítsd, hogy a kérés sikeres volt
         if (!response.ok) {
@@ -26,7 +25,6 @@ const Cars = ({ searchText }) => {
         // Feldolgozni és menteni a kapott adatot a state-be
 
         setCars(data);
-        setLoading(false);
       })
       .catch((error) => {
         // Kezelni a hibát itt, például naplózás vagy felhasználó értesítése

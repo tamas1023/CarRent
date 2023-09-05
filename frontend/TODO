@@ -22,7 +22,8 @@ figyelni arra hogy full reszponzív legyen
 
 Tervek backend el: (NextJs)
 
-Az egy autó oldal betöltés valamiért újra tölti az egész weboldalt!!! Megoldani !!!
-
-regisztráció
+singlecar started,(need cleanup)
+singlecar DELETE RENT MODIFY hiányzik
+login és regisztráció
+először működjön minden lekérdezés, utána lehet a védelemre ráállni pl: axios?? és jwt!
 profil és beállítások elkészítése (profilkép, jelszó válltás stb.)

@@ -8,16 +8,14 @@ function CarAdd(props) {
   const authC = useContext(AuthCont);
   const { notificationHandler } = useContext(NotificationCont);
 
-  const [cars, setCars] = useState(
-    JSON.parse(localStorage.getItem("cars")) || []
-  );
+  const [cars, setCars] = useState();
+  //JSON.parse(localStorage.getItem("cars")) || []
   const [car, SetCar] = useState({
-    id: -1,
-    név: "",
-    ára: -1,
-    leírás: "",
-    kép: "",
-    kiBereltE: false,
+    Name: "",
+    Value: -1,
+    Description: "",
+    Image: "",
+    Rented: false,
   });
 
   const generateUniqueId = () => {
@@ -26,33 +24,76 @@ function CarAdd(props) {
   };
 
   const inputs = [
-    { név: "Név", name: "név", placeholder: "Az autó neve", type: "text" },
+    { név: "Név", name: "Name", placeholder: "Az autó neve", type: "text" },
     {
       név: "Ára /óra (csak szám)",
-      name: "ára",
+      name: "Value",
       placeholder: "Az autó ára forintban értve",
       type: "number",
     },
     {
       név: "Leírás",
-      name: "leírás",
+      name: "Description",
       placeholder: "Az autó leírása",
       type: "text",
     },
     {
       név: "Kép (URL)",
-      name: "kép",
+      name: "Image",
       placeholder: "Az autó képe",
       type: "text",
     },
   ];
 
-  const addNewCar = () => {
+  const addNewCar = async () => {
     if (!authC.isAdmin()) return;
-    const updatedCars = [...cars, { ...car, id: generateUniqueId() }];
-    localStorage.setItem("cars", JSON.stringify(updatedCars));
+    //const updatedCars = [...cars, { ...car, id: generateUniqueId() }];
+    //localStorage.setItem("cars", JSON.stringify(updatedCars));
+    // ide egy beszúrás fell hogy következzen
+    console.log(car);
+    await fetch(import.meta.env.VITE_API_URL + "/auth/carAdd", {
+      method: "POST",
+      body: JSON.stringify(car),
+      headers: {
+        "Content-Type": "application/json", // Megmondjuk a szervernek, hogy JSON adatot küldünk
+      },
+    })
+      .then((res) => {
+        //console.log(res.ok);
+        if (!res.ok) {
+          notificationHandler({
+            type: "error",
+            message: "HTTP Hiba!",
+          });
+          return null;
+        }
+        return res.json();
+        //return res.json(); // Válasz JSON formátumban
+      })
+      .then((data) => {
+        if (data.success) {
+          notificationHandler({
+            type: "success",
+            message: data.msg,
+          });
+        } else {
+          notificationHandler({
+            type: "error",
+            message: data.msg,
+          });
+        }
+      })
+      .catch((error) => {
+        // Ha bármilyen hiba történt a kérés során
+        //console.error("Hiba történt:", error);
+        notificationHandler({
+          type: "error",
+          message: "Hiba történt:" + error,
+        });
+      });
+    //console.log(car);
     navitage("/autoKolcsonzes/Főoldal");
-    notificationHandler({ type: "success", message: "Sikeres autó hozzáadás" });
+    //notificationHandler({ type: "success", message: "Sikeres autó hozzáadás" });
   };
 
   const handleChange = (e) => {
@@ -65,7 +106,7 @@ function CarAdd(props) {
         <h1 className="text-2xl font-semibold mb-6 text-black">
           Új autó hozzáadása
         </h1>
-        <form className="grid gap-4">
+        <div className="grid gap-4">
           {inputs.map((input) => (
             <div className="" key={input.name}>
               {input.name === "leírás" ? (
@@ -95,12 +136,14 @@ function CarAdd(props) {
           {authC.isAdmin() && (
             <button
               className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 rounded-md p-2 mt-4 w-full text-white"
-              onClick={addNewCar}
+              onClick={() => {
+                addNewCar();
+              }}
             >
               Új autó hozzáadása
             </button>
           )}
-        </form>
+        </div>
       </div>
     </div>
   );
