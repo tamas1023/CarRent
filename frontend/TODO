@@ -23,6 +23,9 @@ figyelni arra hogy full reszponzív legyen
 Tervek backend el: (NextJs)
 
 singlecar started,(need cleanup)
+
+ELŐSZÖR LOGIN ÉS REG UTÁNA CAR RENT
+
 singlecar DELETE RENT MODIFY hiányzik
 login és regisztráció
 először működjön minden lekérdezés, utána lehet a védelemre ráállni pl: axios?? és jwt!

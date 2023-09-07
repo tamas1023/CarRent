@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams, useNavigate, Navigate } from "react-router-dom";
+import { useParams, useNavigate, Navigate, json } from "react-router-dom";
 import { AuthCont } from "../Services/AuthContext";
 import { NotificationCont } from "../Services/NotificationContext";
 
@@ -87,21 +87,66 @@ function SingleCar(props) {
     },
   ];
 
-  const deleteCarById = (id) => {
-    if (!authC.isAdmin()) navitage("/Főoldal");
+  const deleteCarById = async (id) => {
+    if (!authC.isAdmin()) navitage("/autoKolcsonzes/Főoldal");
+    /*
     const storedCars = JSON.parse(localStorage.getItem("cars") || "[]");
     const updatedCars = storedCars.filter((car) => car.id !== id);
     localStorage.setItem("cars", JSON.stringify(updatedCars));
+    */
+
+    await fetch(import.meta.env.VITE_API_URL + `/auth/deleteCar/${id}`, {
+      method: "POST",
+    })
+      .then((res) => {
+        //console.log(res.ok);
+        if (!res.ok) {
+          notificationHandler({
+            type: "error",
+            message: "HTTP Hiba!",
+          });
+          return null;
+        }
+        //itt a res.json az a következőben a data?? ha jól tudom
+        return res.json();
+      })
+      .then((data) => {
+        if (data.success) {
+          notificationHandler({
+            type: "success",
+            message: data.msg,
+          });
+          navitage("/autoKolcsonzes/Főoldal");
+        } else {
+          notificationHandler({
+            type: "error",
+            message: data.msg,
+          });
+        }
+      })
+      .catch((error) => {
+        notificationHandler({
+          type: "error",
+          message: "Hiba történt:" + error,
+        });
+      });
+    /*
     navitage("/autoKolcsonzes/Főoldal");
     notificationHandler({ type: "success", message: "Sikeres autó törlés" });
+    */
   };
-  const rent = () => {
+  //TODO:ELŐTTE LOGIN REG UTÁNA EZ
+  const rent = async () => {
     const currentDate = new Date();
+    if (!authC.isLoggedIn) return;
+    if (car.Rented) {
+      return navitage("/autoKolcsonzes/Főoldal");
+    }
+    /*
     oneCar.kiBereltE = true;
     const storedCars = JSON.parse(localStorage.getItem("cars") || "[]");
     storedCars[car.id] = oneCar;
     localStorage.setItem("cars", JSON.stringify(storedCars));
-
     const rent = [
       {
         id: oneCar.id,
@@ -113,9 +158,54 @@ function SingleCar(props) {
     const storedRents = JSON.parse(localStorage.getItem("rents"));
     const updateStoredRents = storedRents ? [...storedRents, ...rent] : rent;
     localStorage.setItem("rents", JSON.stringify(updateStoredRents));
-
+    */
+    await fetch(import.meta.env.VITE_API_URL + `/home/rentCar`, {
+      method: "POST",
+      body: JSON.stringify({
+        CarID: car.ID,
+        UserName: authC.user,
+        CurDate: currentDate,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        //console.log(res.ok);
+        if (!res.ok) {
+          notificationHandler({
+            type: "error",
+            message: "HTTP Hiba!",
+          });
+          return null;
+        }
+        //itt a res.json az a következőben a data?? ha jól tudom
+        return res.json();
+      })
+      .then((data) => {
+        if (data.success) {
+          notificationHandler({
+            type: "success",
+            message: data.msg,
+          });
+          navitage("/autoKolcsonzes/Főoldal");
+        } else {
+          notificationHandler({
+            type: "error",
+            message: data.msg,
+          });
+        }
+      })
+      .catch((error) => {
+        notificationHandler({
+          type: "error",
+          message: "Hiba történt:" + error,
+        });
+      });
+    /*
     navitage("/autoKolcsonzes/Főoldal");
     notificationHandler({ type: "success", message: "Sikeres autó bérlés" });
+    */
   };
   /*
   const oneCar = getItemById(id);
@@ -138,13 +228,56 @@ function SingleCar(props) {
   const handleChange = (e) => {
     SetCar((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-  const changeCar = () => {
+  const changeCar = async () => {
     if (!authC.isAdmin()) navitage("/autoKolcsonzes/Főoldal");
+    /*
     const storedCars = JSON.parse(localStorage.getItem("cars") || "[]");
     storedCars[car.id] = car;
     localStorage.setItem("cars", JSON.stringify(storedCars));
+    */
+    await fetch(import.meta.env.VITE_API_URL + `/auth/changeCar/${id}`, {
+      method: "POST",
+      body: JSON.stringify(car),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        //console.log(res.ok);
+        if (!res.ok) {
+          notificationHandler({
+            type: "error",
+            message: "HTTP Hiba!",
+          });
+          return null;
+        }
+        //itt a res.json az a következőben a data?? ha jól tudom
+        return res.json();
+      })
+      .then((data) => {
+        if (data.success) {
+          notificationHandler({
+            type: "success",
+            message: data.msg,
+          });
+          navitage("/autoKolcsonzes/Főoldal");
+        } else {
+          notificationHandler({
+            type: "error",
+            message: data.msg,
+          });
+        }
+      })
+      .catch((error) => {
+        notificationHandler({
+          type: "error",
+          message: "Hiba történt:" + error,
+        });
+      });
+    /*
     navitage("/autoKolcsonzes/Főoldal");
     notificationHandler({ type: "success", message: "Sikeres autó módosítás" });
+    */
   };
   const ConfirmModal = ({ onCancel, onConfirm }) => {
     let message;

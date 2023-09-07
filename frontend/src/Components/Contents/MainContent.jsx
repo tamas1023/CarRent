@@ -17,6 +17,7 @@ import NotificationContext from "../Services/NotificationContext";
 import Notification from "../Utilities/Notification";
 import ToHome from "../404/ToHome";
 import CarHistory from "../CarThings/CarHistory";
+import Registration from "../Auth/Registration";
 
 const MainContent = () => {
   return (
@@ -84,6 +85,16 @@ const MainContent = () => {
               <OutProtection>
                 <LoggedPageHolder title={"Bejelentkezés"}>
                   <Login />
+                </LoggedPageHolder>
+              </OutProtection>
+            }
+          />
+          <Route
+            path="/autoKolcsonzes/Regisztráció"
+            element={
+              <OutProtection>
+                <LoggedPageHolder title={"Regisztráció"}>
+                  <Registration />
                 </LoggedPageHolder>
               </OutProtection>
             }

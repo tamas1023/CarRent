@@ -50,7 +50,6 @@ function CarAdd(props) {
     //const updatedCars = [...cars, { ...car, id: generateUniqueId() }];
     //localStorage.setItem("cars", JSON.stringify(updatedCars));
     // ide egy beszúrás fell hogy következzen
-    console.log(car);
     await fetch(import.meta.env.VITE_API_URL + "/auth/carAdd", {
       method: "POST",
       body: JSON.stringify(car),

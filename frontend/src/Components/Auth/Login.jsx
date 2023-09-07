@@ -5,12 +5,16 @@ import { NotificationCont } from "../Services/NotificationContext";
 
 const Login = (props) => {
   const navigate = useNavigate();
-  const username = useRef();
+  const email = useRef();
   const pass = useRef();
+
   const authC = useContext(AuthCont);
   const { notificationHandler } = useContext(NotificationCont);
-  const CheckUser = () => {
-    authC.login(username.current.value);
+  const ToRegistration = () => {
+    navigate("/autoKolcsonzes/Regisztráció");
+  };
+  const CheckUser = async () => {
+    /*
     const payments = JSON.parse(localStorage.getItem("payments"));
     const payment = [
       {
@@ -30,13 +34,62 @@ const Login = (props) => {
         localStorage.setItem("payments", JSON.stringify(updatedPayments));
       }
     }
+    */
+    //authC.login(username.current.value);
+    await fetch(import.meta.env.VITE_API_URL + "/auth/userLogin", {
+      method: "POST",
+      body: JSON.stringify({
+        Email: email.current.value,
+        Password: pass.current.value,
+      }),
+      headers: {
+        "Content-Type": "application/json", // Megmondjuk a szervernek, hogy JSON adatot küldünk
+      },
+    })
+      .then((res) => {
+        //console.log(res.ok);
+        if (!res.ok) {
+          notificationHandler({
+            type: "error",
+            message: "HTTP Hiba!",
+          });
+          return null;
+        }
 
+        return res.json();
+        //return res.json(); // Válasz JSON formátumban
+      })
+      .then((data) => {
+        if (data.success) {
+          notificationHandler({
+            type: "success",
+            message: data.msg,
+          });
+          authC.login(data.username);
+          navigate("/autoKolcsonzes/Főoldal");
+        } else {
+          notificationHandler({
+            type: "error",
+            message: data.msg,
+          });
+        }
+      })
+      .catch((error) => {
+        // Ha bármilyen hiba történt a kérés során
+        //console.error("Hiba történt:", error);
+        notificationHandler({
+          type: "error",
+          message: "Hiba történt:" + error,
+        });
+      });
+    /*
     navigate("/autoKolcsonzes/Főoldal");
     notificationHandler({ type: "success", message: "Sikeres bejelentkezés" });
+    */
   };
   return (
     <div>
-      <form className="w-5/6 m-auto">
+      <div className="w-5/6 m-auto">
         <div className="border-b border-gray-900/10 pb-12">
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 ">
             <div className="">
@@ -45,11 +98,11 @@ const Login = (props) => {
               </label>
               <div className="mt-2">
                 <input
-                  type="text"
-                  name="name"
-                  ref={username}
+                  type="email"
+                  name="email"
+                  ref={email}
                   className="block w-full rounded-md border-0 py-1.5  shadow-sm ring-1 ring-inset ring-gray-300 text-black focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  placeholder="Felhasználónév"
+                  placeholder="E-mail"
                 />
               </div>
               <label className="block text-sm font-medium leading-6 ">
@@ -74,9 +127,17 @@ const Login = (props) => {
             >
               Bejelentkezés
             </button>
+            <button
+              className="bg-green-500 hover:bg-green-600 active:bg-green-700 focus:outline-none focus:ring focus:ring-green-300 rounded-md p-2 text-white"
+              onClick={() => {
+                ToRegistration();
+              }}
+            >
+              Regisztráció
+            </button>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 };

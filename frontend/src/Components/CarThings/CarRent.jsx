@@ -33,6 +33,33 @@ function CarRent(props) {
   const [payAmount, setPayAmount] = useState();
   const payAmountRef = useRef(0);
 
+  async function getRents() {
+    await fetch(import.meta.env.VITE_API_URL + "/home/getRents", {
+      method: "GET",
+      body: JSON.stringify({ UserName: authC.user }),
+    })
+      .then((response) => {
+        // Ellenőrizd a választ, hogy biztosítsd, hogy a kérés sikeres volt
+        if (!response.ok) {
+          throw new Error("A kérés sikertelen volt");
+        }
+        return response.json(); // Válasz JSON formátumban
+      })
+      .then((data) => {
+        // Feldolgozni és menteni a kapott adatot a state-be
+
+        setCars(data);
+      })
+      .catch((error) => {
+        // Kezelni a hibát itt, például naplózás vagy felhasználó értesítése
+        console.error("Hiba történt:", error);
+      });
+  }
+
+  useEffect(() => {
+    getRents();
+  }, []);
+
   const toZero = () => {
     if (onePayment.money < 0) {
       onePayment.money = 0;
