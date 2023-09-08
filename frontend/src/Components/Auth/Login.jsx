@@ -94,7 +94,7 @@ const Login = (props) => {
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 ">
             <div className="">
               <label className="block text-sm font-medium leading-6 ">
-                Felhasználónév
+                E-mail
               </label>
               <div className="mt-2">
                 <input

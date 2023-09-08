@@ -1,20 +1,52 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 
 const CarHistory = () => {
-  const [history, setHistory] = useState(
-    JSON.parse(localStorage.getItem("history")) || []
-  );
+  const [history, setHistory] = useState([]);
+  //JSON.parse(localStorage.getItem("history")) || []
   //console.log(history);
-  const reversedDates = [...history].reverse();
+  const formattedHistory = history.map((item) => {
+    const formattedStartDate = new Date(item.StartDate).toLocaleString();
+    const formattedEndDate = new Date(item.EndDate).toLocaleString();
+
+    return {
+      ...item,
+      StartDate: formattedStartDate,
+      EndDate: formattedEndDate,
+    };
+  });
+  
+  const reversedDates = [...formattedHistory].reverse();
+
   const [searchText, setSearchText] = useState("");
   // Szűrjük a bérelhető autókat, vagyis azokat, amelyek kiBereltE értéke false
 
+  async function getHistory() {
+    await fetch(import.meta.env.VITE_API_URL + "/auth/getHistory", {
+      method: "GET",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("A kérés sikertelen volt");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setHistory(data);
+      })
+      .catch((error) => {
+        console.error("Hiba történt:", error);
+      });
+  }
+
+  useEffect(() => {
+    getHistory();
+  }, []);
   const filteredCars = reversedDates.filter(
     (car) =>
-      car.felhasználóNév.toLowerCase().includes(searchText.toLowerCase()) ||
-      car.kezdetiDátum.toLowerCase().includes(searchText.toLowerCase()) ||
-      car.végeDátum.toLowerCase().includes(searchText.toLowerCase())
+      car.UserName.toLowerCase().includes(searchText.toLowerCase()) ||
+      car.StartDate.toLowerCase().includes(searchText.toLowerCase()) ||
+      car.EndDate.toLowerCase().includes(searchText.toLowerCase())
   );
   const handleSearch = (e) => {
     setSearchText(e.target.value);
@@ -70,29 +102,27 @@ const CarHistory = () => {
       >
         {filteredCars.map((car) => (
           <div
-            key={car.id}
+            key={car.ID}
             className={`border-solid border-2 border-sky-700 flex flex-col rounded-lg overflow-hidden shadow-md ${
               history.length === 1 ? "p-4 w-80 m-auto" : "p-4 m-5"
             }`}
           >
             <p className="text-xl font-semibold mb-2 text-center">
-              {car.felhasználóNév}
+              {car.UserName}
             </p>
             <div className="flex-shrink-0">
               <img
-                src={car.kép}
-                alt={car.autóNév}
+                src={car.Image}
+                alt={car.CarName}
                 className="w-full h-48 object-cover"
               />
             </div>
             <div className="flex-grow">
-              <h2 className="text-xl font-semibold mb-2">{car.autóNév}</h2>
-              <p className="text-slate-200">{car.leírás}</p>
-              <p className="text-slate-300 mt-2">Ár: {car.ára}/óra</p>
-              <p className="text-slate-200">
-                Kezdeti dátum: {car.kezdetiDátum}
-              </p>
-              <p className="text-slate-300 mt-2">Vége dátum: {car.végeDátum}</p>
+              <h2 className="text-xl font-semibold mb-2">{car.CarName}</h2>
+              <p className="text-slate-200">{car.Description}</p>
+              <p className="text-slate-300 mt-2">Ár: {car.Value}/óra</p>
+              <p className="text-slate-200">Kezdeti dátum: {car.StartDate}</p>
+              <p className="text-slate-300 mt-2">Vége dátum: {car.EndDate}</p>
             </div>
           </div>
         ))}

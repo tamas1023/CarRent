@@ -24,9 +24,7 @@ Tervek backend el: (NextJs)
 
 singlecar started,(need cleanup)
 
-ELŐSZÖR LOGIN ÉS REG UTÁNA CAR RENT
 
-singlecar DELETE RENT MODIFY hiányzik
-login és regisztráció
+TODO:az admin jog nem az autc user==admin döntse el ,hanem a rightID alapján
 először működjön minden lekérdezés, utána lehet a védelemre ráállni pl: axios?? és jwt!
 profil és beállítások elkészítése (profilkép, jelszó válltás stb.)
