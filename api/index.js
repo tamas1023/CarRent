@@ -9,7 +9,8 @@ app.use(cors());
 app.use(express.static("Public"));
 app.use(urlencoded({ extened: true }));
 app.use(express.json());
-
+//a header ba authtoken??
+//app.use(cors({ exposedHeaders: "authtoken" }));
 /*
 async function test() {
   try {

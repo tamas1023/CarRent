@@ -4,6 +4,7 @@ const sequelize = require("../Models/connection.modell");
 const Users = require("../Models/users.modell");
 const History = require("../Models/history.modell");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const {
   lengthCheck,
   numberCheck,
@@ -55,14 +56,24 @@ exports.userLogin = async (req, res) => {
     if (!isSame) {
       return res.send({ success: false, msg: "Hibás email vagy jelszó!" });
     }
-    return res.send({
+    const token = await jwt.sign(
+      { name: user.UserName },
+      process.env.ACCESS_TOKEN_KEY,
+      {
+        expiresIn: "15s",
+      }
+    );
+    if (!token) {
+      return res.send({ success: false, msg: "Token hiba!" });
+    }
+    return res.set({ authtoken: token }).send({
       success: true,
       msg: "Sikeres bejelentkezés!",
       username: user.UserName,
     });
   } catch (error) {
     console.log(error);
-    return res.send({ success: false, msg: "Fatal Error!" });
+    return res.send({ success: false, msg: "Fatal Error! " + error });
   }
 };
 exports.userReg = async (req, res) => {
@@ -143,6 +154,7 @@ exports.userReg = async (req, res) => {
     await t.rollback();
     return res.send({ success: false, msg: "Regisztrációs hiba!" });
   }
+
   await t.commit();
   return res.send({ success: true, msg: "Sikeres regisztráció!" });
   //return res.send({ success: true, msg: "Tesztelek" });
@@ -225,5 +237,73 @@ exports.deleteCar = async (req, res) => {
     //res.status(500).json({ error: "Szerverhiba" });
     await t.rollback();
     return res.status(500).send({ success: false, msg: error.message });
+  }
+};
+exports.authCheck = async (req, res) => {
+  const t = await sequelize.transaction();
+  try {
+    const { user } = req.body;
+    const { authtoken } = req.headers;
+    /*
+    console.log(authtoken);
+    console.log(user);
+    console.log(user.UserName);
+    */
+    //Adatok vizsgálata
+    if (!authtoken || !user) {
+      await t.rollback();
+      return res.send({ success: false, msg: "Hiányzó adatok!" });
+    }
+
+    //Új Token létrehozása
+    const token = await jwt.sign(
+      { name: user.UserName },
+      process.env.ACCESS_TOKEN_KEY,
+      {
+        expiresIn: "15s",
+      }
+    );
+
+    if (!token) {
+      await t.rollback();
+      return res.send({ success: false, msg: "Token hiba!" });
+    }
+    console.log(token);
+    console.log(authtoken);
+    if (token != authtoken) {
+      //Jelenlegi Token letiltása
+      //nálam gyakran lejár, de sztem egyenlőre így jó
+      //ha lejár akkor újat kell kérni
+      //ha kijelentkeznénk akkor ne lehessen ugyan azzal a tokennel belépni,
+      //ez lehet úgy is ahogy az Erik csinálta, vagy sztem 10 percre beállítom
+      //és ha kell újítani akkor megújjitom
+      //de mi a feltétele, hogy megújjítsam a tokent?
+      /*
+      return res.send({
+        success: false,
+        msg: "A token nem egyezik az authtokennel",
+      });
+      */
+      /*
+      const results = await sequelize.query(
+        `INSERT INTO denidedtokens (token, date) VALUES ('${authtoken}','${dateToString(
+          new Date()
+        )}')`,
+        QueryTypes.INSERT,
+        { transaction: t }
+      );
+
+      if (!results) {
+        await t.rollback();
+        return res.send({ success: false, msg: "Token toltási hiba!" });
+      }
+      */
+    }
+
+    await t.commit();
+    return res.set({ authtoken: token }).send({ success: true, user: user });
+  } catch (error) {
+    console.log(error);
+    return res.send({ success: false, msg: "Fatal Error! " + error });
   }
 };

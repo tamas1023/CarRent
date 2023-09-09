@@ -11,4 +11,5 @@ Router.post("/carAdd", authController.carAdd);
 Router.post("/changeCar/:id", authController.changeCar);
 Router.post("/deleteCar/:id", authController.deleteCar);
 Router.get("/getHistory", authController.getHistory);
+Router.post("/authCheck", authMiddleware.isAuth, authController.authCheck);
 module.exports = Router;

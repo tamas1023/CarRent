@@ -51,8 +51,8 @@ const Registration = () => {
             type: "success",
             message: data.msg,
           });
-          authC.login(username.current.value);
-          navigate("/autoKolcsonzes/Főoldal");
+          //authC.login(username.current.value);
+          navigate("/autoKolcsonzes/Bejelentkezés");
         } else {
           notificationHandler({
             type: "error",
