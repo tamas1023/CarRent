@@ -36,4 +36,5 @@ TODO:
 TODO:az admin jog nem az autc user==admin döntse el ,hanem a rightID alapján
 először működjön minden lekérdezés, utána lehet a védelemre ráállni pl: axios?? és jwt!
 Erik től a header ből való átolvasást lenézni??
+autó hozzáadás statikus kép
 profil és beállítások elkészítése (profilkép, jelszó válltás stb.)
