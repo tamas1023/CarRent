@@ -2,6 +2,9 @@ import React, { useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthCont } from "../Services/AuthContext";
 import { NotificationCont } from "../Services/NotificationContext";
+import axios from "axios";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 
 const Login = (props) => {
   const navigate = useNavigate();
@@ -36,50 +39,44 @@ const Login = (props) => {
     }
     */
     //authC.login(username.current.value);
-    await fetch(import.meta.env.VITE_API_URL + "/auth/userLogin", {
+
+    axios({
       method: "POST",
-      body: JSON.stringify({
+      url: import.meta.env.VITE_API_URL + "/auth/userLogin",
+      data: {
         Email: email.current.value,
         Password: pass.current.value,
-      }),
-      headers: {
-        "Content-Type": "application/json", // Megmondjuk a szervernek, hogy JSON adatot küldünk
       },
     })
       .then((res) => {
-        //console.log(res.ok);
-        if (!res.ok) {
-          notificationHandler({
-            type: "error",
-            message: "HTTP Hiba!",
-          });
-          return null;
-        }
-
-        return res.json();
-        //return res.json(); // Válasz JSON formátumban
-      })
-      .then((data) => {
-        if (data.success) {
+        if (res.data.success) {
           notificationHandler({
             type: "success",
-            message: data.msg,
+            message: res.data.msg,
           });
-          authC.login(data.username);
+          console.log(res.headers.get("authtoken"));
+          authC.login(res.data.username);
+          cookies.set("authtoken", res.headers.get("authtoken"), { path: "/" });
           navigate("/autoKolcsonzes/Főoldal");
         } else {
           notificationHandler({
             type: "error",
-            message: data.msg,
+            message: res.data.msg,
           });
         }
+        //console.log(res.headers.get("authtoken"));
+
+        //cookies.set("authtoken", res.headers.get("authtoken"), { path: "/" });
+        //return res.json();
+        //return res.json(); // Válasz JSON formátumban
       })
+
       .catch((error) => {
         // Ha bármilyen hiba történt a kérés során
-        //console.error("Hiba történt:", error);
+        console.error("Hiba történt:", error);
         notificationHandler({
           type: "error",
-          message: "Hiba történt:" + error,
+          message: "Hiba történt:Login  " + error,
         });
       });
     /*

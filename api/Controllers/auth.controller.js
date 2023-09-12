@@ -5,16 +5,19 @@ const Users = require("../Models/users.modell");
 const History = require("../Models/history.modell");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { QueryTypes } = require("sequelize");
+const { dateToString } = require("../Services/date.service");
 const {
   lengthCheck,
   numberCheck,
   lowerUpperCheck,
 } = require("../Services/pass.service");
-
+/*
 exports.authCheck = async (req, res) => {
   console.log("authCheck");
   res.send({ message: "authCheck" });
 };
+*/
 exports.getHistory = async (req, res) => {
   //console.log("authCheck");
   //res.send({ message: "authCheck" });
@@ -268,9 +271,15 @@ exports.authCheck = async (req, res) => {
       await t.rollback();
       return res.send({ success: false, msg: "Token hiba!" });
     }
-    console.log(token);
-    console.log(authtoken);
+    //console.log(token);
+    //console.log(authtoken);
     if (token != authtoken) {
+      /*
+      return res.send({
+        success: false,
+        msg: "A 2 token nem egyezik de mind a 2 helyes??!",
+      });
+      */
       //Jelenlegi Token letiltása
       //nálam gyakran lejár, de sztem egyenlőre így jó
       //ha lejár akkor újat kell kérni
@@ -278,15 +287,8 @@ exports.authCheck = async (req, res) => {
       //ez lehet úgy is ahogy az Erik csinálta, vagy sztem 10 percre beállítom
       //és ha kell újítani akkor megújjitom
       //de mi a feltétele, hogy megújjítsam a tokent?
-      /*
-      return res.send({
-        success: false,
-        msg: "A token nem egyezik az authtokennel",
-      });
-      */
-      /*
       const results = await sequelize.query(
-        `INSERT INTO denidedtokens (token, date) VALUES ('${authtoken}','${dateToString(
+        `INSERT INTO deniedtokens (token, date) VALUES ('${authtoken}','${dateToString(
           new Date()
         )}')`,
         QueryTypes.INSERT,
@@ -295,15 +297,14 @@ exports.authCheck = async (req, res) => {
 
       if (!results) {
         await t.rollback();
-        return res.send({ success: false, msg: "Token toltási hiba!" });
+        return res.send({ success: false, msg: "Token tiltási hiba!" });
       }
-      */
     }
 
     await t.commit();
     return res.set({ authtoken: token }).send({ success: true, user: user });
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return res.send({ success: false, msg: "Fatal Error! " + error });
   }
 };

@@ -35,6 +35,12 @@ TODO:
 
 TODO:az admin jog nem az autc user==admin döntse el ,hanem a rightID alapján
 először működjön minden lekérdezés, utána lehet a védelemre ráállni pl: axios?? és jwt!
+
+JWT almost finished, proper token check and refrect check needed
+A normális ki logoutolás, és token törlés akkor működik még csak ha manuálisan újratöltjük a weboldalt,
+Meg kell oldani, hogy ha lejár az aktuális token, akkor kidobjon autómatikusan
+
 Erik től a header ből való átolvasást lenézni??
 autó hozzáadás statikus kép
+a lekéréseket (Post, Get) áttehetném a context be, hogy egy helyen legyen az összes lekérdezés
 profil és beállítások elkészítése (profilkép, jelszó válltás stb.)

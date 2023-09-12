@@ -1,5 +1,7 @@
 const Users = require("../Models/users.modell");
 const jwt = require("jsonwebtoken");
+const sequelize = require("../Models/connection.modell");
+const { QueryTypes } = require("sequelize");
 exports.isAuth = async (req, res, next) => {
   //res.send({ message: "middleware" });
   //itt kell leellenőrizni, hogy pl az felhasználó be van e lépve, van e érvényes tokenje stb
@@ -14,23 +16,23 @@ exports.isAuth = async (req, res, next) => {
     }
     //Token visszafejtése
     const data = await jwt.verify(authtoken, process.env.ACCESS_TOKEN_KEY);
-    console.log(data);
+    //console.log(data);
     if (!data) {
       return res.send({ success: false, out: true, msg: "Hibás token!" });
     }
 
     //Tiltottsági vizsgálat!
-    /*
-    const denideds = await sequelize.query(
-      `SELECT token FROM denidedtokens where token = :authtoken`,
+
+    const denieds = await sequelize.query(
+      `SELECT token FROM deniedtokens where token = :authtoken`,
       { replacements: { authtoken: authtoken } },
       QueryTypes.SELECT
     );
 
-    if (denideds[0].length > 0) {
+    if (denieds[0].length > 0) {
       return res.send({ success: false, out: true, msg: "Token kitiltva!" });
     }
-    */
+
     //Felhasználó lekérése
     const user = await Users.findOne({
       where: {
@@ -51,10 +53,14 @@ exports.isAuth = async (req, res, next) => {
 
     return next();
   } catch (error) {
-    if (error === "TokenExpiredError") {
+    if (error.name === "TokenExpiredError") {
       return res.send({ success: false, msg: " " + error });
+    } else {
+      return res.send({
+        success: false,
+        msg: "Fatal Error! middleware " + error,
+      });
     }
-    return res.send({ success: false, msg: "Fatal Error! " + error });
   }
   next();
 };

@@ -72,11 +72,11 @@ const MainContent = () => {
           <Route
             path="/autoKolcsonzes/History/"
             element={
-              <OutProtection>
+              <AdminProtection>
                 <LoggedPageHolder title={"History"}>
                   <CarHistory />
                 </LoggedPageHolder>
-              </OutProtection>
+              </AdminProtection>
             }
           />
           <Route
