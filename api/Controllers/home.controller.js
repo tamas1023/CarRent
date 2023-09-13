@@ -6,6 +6,7 @@ const Users = require("../Models/users.modell");
 const History = require("../Models/history.modell");
 
 exports.getCars = async (req, res) => {
+  
   const cars = await Cars.findAll({
     //attributes: ["ID"],
   });

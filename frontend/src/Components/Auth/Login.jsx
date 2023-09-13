@@ -2,7 +2,6 @@ import React, { useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthCont } from "../Services/AuthContext";
 import { NotificationCont } from "../Services/NotificationContext";
-import axios from "axios";
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
 
@@ -40,35 +39,50 @@ const Login = (props) => {
     */
     //authC.login(username.current.value);
 
-    axios({
+    await fetch(import.meta.env.VITE_API_URL + "/auth/userLogin", {
       method: "POST",
-      url: import.meta.env.VITE_API_URL + "/auth/userLogin",
-      data: {
+
+      body: JSON.stringify({
         Email: email.current.value,
         Password: pass.current.value,
+      }),
+      headers: {
+        "Content-Type": "application/json",
       },
     })
       .then((res) => {
-        if (res.data.success) {
-          notificationHandler({
-            type: "success",
-            message: res.data.msg,
-          });
-          console.log(res.headers.get("authtoken"));
-          authC.login(res.data.username);
-          cookies.set("authtoken", res.headers.get("authtoken"), { path: "/" });
-          navigate("/autoKolcsonzes/Főoldal");
-        } else {
+        if (!res.ok) {
           notificationHandler({
             type: "error",
-            message: res.data.msg,
+            message: "HTTP Hiba!",
           });
+          return null;
         }
+        cookies.set("authtoken", res.headers.get("authtoken"), { path: "/" });
+        return res.json();
         //console.log(res.headers.get("authtoken"));
 
         //cookies.set("authtoken", res.headers.get("authtoken"), { path: "/" });
         //return res.json();
         //return res.json(); // Válasz JSON formátumban
+      })
+      .then((data) => {
+        if (data.success) {
+          notificationHandler({
+            type: "success",
+            message: data.msg,
+          });
+          //console.log(res.headers.get("authtoken"));
+          //console.log(data.userrights);
+          authC.login(data.username, data.userrights);
+
+          navigate("/autoKolcsonzes/Főoldal");
+        } else {
+          notificationHandler({
+            type: "error",
+            message: data.msg,
+          });
+        }
       })
 
       .catch((error) => {

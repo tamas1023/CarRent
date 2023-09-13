@@ -63,7 +63,7 @@ exports.userLogin = async (req, res) => {
       { name: user.UserName },
       process.env.ACCESS_TOKEN_KEY,
       {
-        expiresIn: "15s",
+        expiresIn: "1h",
       }
     );
     if (!token) {
@@ -73,6 +73,7 @@ exports.userLogin = async (req, res) => {
       success: true,
       msg: "Sikeres bejelentkezés!",
       username: user.UserName,
+      userrights: user.RightsId,
     });
   } catch (error) {
     console.log(error);
@@ -244,11 +245,13 @@ exports.deleteCar = async (req, res) => {
 };
 exports.authCheck = async (req, res) => {
   const t = await sequelize.transaction();
+
   try {
     const { user } = req.body;
     const { authtoken } = req.headers;
+    //console.log("-----------------------------");
+    //console.log(authtoken);
     /*
-    console.log(authtoken);
     console.log(user);
     console.log(user.UserName);
     */
@@ -263,7 +266,7 @@ exports.authCheck = async (req, res) => {
       { name: user.UserName },
       process.env.ACCESS_TOKEN_KEY,
       {
-        expiresIn: "15s",
+        expiresIn: "1h",
       }
     );
 
@@ -271,6 +274,7 @@ exports.authCheck = async (req, res) => {
       await t.rollback();
       return res.send({ success: false, msg: "Token hiba!" });
     }
+    //console.log(token);
     //console.log(token);
     //console.log(authtoken);
     if (token != authtoken) {
@@ -287,6 +291,7 @@ exports.authCheck = async (req, res) => {
       //ez lehet úgy is ahogy az Erik csinálta, vagy sztem 10 percre beállítom
       //és ha kell újítani akkor megújjitom
       //de mi a feltétele, hogy megújjítsam a tokent?
+      //console.log("2 nem egyezik");
       const results = await sequelize.query(
         `INSERT INTO deniedtokens (token, date) VALUES ('${authtoken}','${dateToString(
           new Date()
@@ -299,6 +304,7 @@ exports.authCheck = async (req, res) => {
         await t.rollback();
         return res.send({ success: false, msg: "Token tiltási hiba!" });
       }
+      //console.log(results);
     }
 
     await t.commit();

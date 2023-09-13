@@ -8,8 +8,10 @@ exports.isAuth = async (req, res, next) => {
   //console.log("middleware");
   try {
     //majd nekünk kell ezt beállítani a post kérésnél
-    const { authtoken } = req.headers;
 
+    const { authtoken } = req.headers;
+    //console.log("middleware");
+    //console.log(authtoken);
     //Token meglétének vizsgálata
     if (!authtoken) {
       return res.send({ success: false, out: true, msg: "Hiányzó token!" });
@@ -54,11 +56,12 @@ exports.isAuth = async (req, res, next) => {
     return next();
   } catch (error) {
     if (error.name === "TokenExpiredError") {
-      return res.send({ success: false, msg: " " + error });
+      return res.send({ success: false, msg: " " + error, logout: true });
     } else {
       return res.send({
         success: false,
         msg: "Fatal Error! middleware " + error,
+        logout: true,
       });
     }
   }

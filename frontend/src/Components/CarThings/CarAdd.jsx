@@ -2,6 +2,8 @@ import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthCont } from "../Services/AuthContext";
 import { NotificationCont } from "../Services/NotificationContext";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 
 function CarAdd(props) {
   const navitage = useNavigate();
@@ -55,6 +57,7 @@ function CarAdd(props) {
       body: JSON.stringify(car),
       headers: {
         "Content-Type": "application/json", // Megmondjuk a szervernek, hogy JSON adatot küldünk
+        authtoken: cookies.get("authtoken") || null,
       },
     })
       .then((res) => {
@@ -70,6 +73,13 @@ function CarAdd(props) {
         //return res.json(); // Válasz JSON formátumban
       })
       .then((data) => {
+        if (data.logout) {
+          notificationHandler({
+            type: "warning",
+            message: "Jelentkezz be újra!",
+          });
+          authC.logout();
+        }
         if (data.success) {
           notificationHandler({
             type: "success",

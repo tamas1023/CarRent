@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2023. Sze 08. 20:06
+-- Létrehozás ideje: 2023. Sze 13. 16:17
 -- Kiszolgáló verziója: 10.4.17-MariaDB
 -- PHP verzió: 8.0.1
 
@@ -43,6 +43,51 @@ CREATE TABLE `cars` (
 INSERT INTO `cars` (`ID`, `Name`, `Value`, `Description`, `Image`, `Rented`) VALUES
 (1, 'VW Bogár', 1000, 'Ez egy csodálatos autó.', 'https://upload.wikimedia.org/wikipedia/commons/c/cf/Volkswagen_Beetle_.jpg', 0),
 (2, 'VW bogár', 2500, 'Kék színű, és még szép is!', 'https://upload.wikimedia.org/wikipedia/commons/4/47/VW_Käfer_blue_1956_vr_TCE.jpg', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `deniedtokens`
+--
+
+CREATE TABLE `deniedtokens` (
+  `token` varchar(1000) COLLATE utf8_hungarian_ci NOT NULL,
+  `date` varchar(100) COLLATE utf8_hungarian_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `deniedtokens`
+--
+
+INSERT INTO `deniedtokens` (`token`, `date`) VALUES
+('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiw5Z0w7ZkaWsiLCJpYXQiOjE2OTQ1MjMzNjMsImV4cCI6MTY5NDU', '0000-00-00 00:00:00'),
+('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiw5Z0w7ZkaWsiLCJpYXQiOjE2OTQ1MjM0NTIsImV4cCI6MTY5NDU', '0000-00-00 00:00:00'),
+('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiw5Z0w7ZkaWsiLCJpYXQiOjE2OTQ1MjQzNjAsImV4cCI6MTY5NDUyNDM3NX0.EJIK52QYjv3OlPx9HlIlC_SNdFWF_rdGX4d7XIj3Ih8', '2023-09-12-15'),
+('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiw5Z0w7ZkaWsiLCJpYXQiOjE2OTQ1MjY4NDAsImV4cCI6MTY5NDUyNjg1NX0.2tI903KonxK0PPO3Jt9w3GpJDM6NfPzjTtOUVMeTjzY', '2023-09-12-15'),
+('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiw5Z0w7ZkaWsiLCJpYXQiOjE2OTQ1MjY4NDcsImV4cCI6MTY5NDUyNjg2Mn0.aEfH_stA5kYI_XvRRx3WXJKoJfv4dTB-LoMC-l8KnvE', '2023-09-12-15'),
+('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiw5Z0w7ZkaWsiLCJpYXQiOjE2OTQ1Mjc4MjksImV4cCI6MTY5NDUyNzg0NH0.JK1QuyLLYipPKA4B8jroni_XI9GEi8DAPdRzxxU2Tn0', '2023-09-12-16'),
+('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiw5Z0w7ZkaWsiLCJpYXQiOjE2OTQ1NDE4OTIsImV4cCI6MTY5NDU0MTkwN30.UPZ6x6GhIO_etFCTDVKlH44E6Ok-vYckIHpLmcG7cFo', '2023-09-12-20'),
+('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiw5Z0w7ZkaWsiLCJpYXQiOjE2OTQ1NDI2NjYsImV4cCI6MTY5NDU0MjY4MX0.rfWhpdlrbObTtrSWkXxK4_loJx8fz9Q48ciK6arlaQU', '2023-09-12-20');
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `gyaktabla`
+--
+
+CREATE TABLE `gyaktabla` (
+  `ID` int(11) NOT NULL,
+  `Name` int(11) NOT NULL,
+  `Value` int(11) NOT NULL,
+  `email` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `gyaktabla`
+--
+
+INSERT INTO `gyaktabla` (`ID`, `Name`, `Value`, `email`) VALUES
+(1, 31231, 31313, 3123);
 
 -- --------------------------------------------------------
 
@@ -129,6 +174,12 @@ ALTER TABLE `cars`
   ADD PRIMARY KEY (`ID`);
 
 --
+-- A tábla indexei `gyaktabla`
+--
+ALTER TABLE `gyaktabla`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- A tábla indexei `history`
 --
 ALTER TABLE `history`
@@ -155,6 +206,12 @@ ALTER TABLE `users`
 --
 ALTER TABLE `cars`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT a táblához `gyaktabla`
+--
+ALTER TABLE `gyaktabla`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT a táblához `history`

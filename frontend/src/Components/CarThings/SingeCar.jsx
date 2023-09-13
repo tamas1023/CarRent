@@ -97,6 +97,7 @@ function SingleCar(props) {
 
     await fetch(import.meta.env.VITE_API_URL + `/auth/deleteCar/${id}`, {
       method: "POST",
+      headers: { authtoken: cookies.get("authtoken") || null },
     })
       .then((res) => {
         //console.log(res.ok);
@@ -111,6 +112,14 @@ function SingleCar(props) {
         return res.json();
       })
       .then((data) => {
+        if (data.logout) {
+          notificationHandler({
+            type: "warning",
+            message: "Jelentkezz be újra!",
+          });
+          authC.logout();
+          return;
+        }
         if (data.success) {
           notificationHandler({
             type: "success",
@@ -168,6 +177,7 @@ function SingleCar(props) {
       }),
       headers: {
         "Content-Type": "application/json",
+        authtoken: cookies.get("authtoken") || null,
       },
     })
       .then((res) => {
@@ -183,6 +193,14 @@ function SingleCar(props) {
         return res.json();
       })
       .then((data) => {
+        if (data.logout) {
+          notificationHandler({
+            type: "warning",
+            message: "Jelentkezz be újra!",
+          });
+          authC.logout();
+          return;
+        }
         if (data.success) {
           notificationHandler({
             type: "success",
@@ -240,6 +258,7 @@ function SingleCar(props) {
       body: JSON.stringify(car),
       headers: {
         "Content-Type": "application/json",
+        authtoken: cookies.get("authtoken") || null,
       },
     })
       .then((res) => {
@@ -255,6 +274,14 @@ function SingleCar(props) {
         return res.json();
       })
       .then((data) => {
+        if (data.logout) {
+          notificationHandler({
+            type: "warning",
+            message: "Jelentkezz be újra!",
+          });
+          authC.logout();
+          return;
+        }
         if (data.success) {
           notificationHandler({
             type: "success",

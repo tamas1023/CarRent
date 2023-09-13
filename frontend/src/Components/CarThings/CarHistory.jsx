@@ -1,8 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
+import { AuthCont } from "../Services/AuthContext";
+import { NotificationCont } from "../Services/NotificationContext";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 
 const CarHistory = () => {
   const [history, setHistory] = useState([]);
+  const authC = useContext(AuthCont);
+  const { notificationHandler } = useContext(NotificationCont);
   //JSON.parse(localStorage.getItem("history")) || []
   //console.log(history);
   const formattedHistory = history.map((item) => {
@@ -15,7 +21,7 @@ const CarHistory = () => {
       EndDate: formattedEndDate,
     };
   });
-  
+
   const reversedDates = [...formattedHistory].reverse();
 
   const [searchText, setSearchText] = useState("");
@@ -24,6 +30,7 @@ const CarHistory = () => {
   async function getHistory() {
     await fetch(import.meta.env.VITE_API_URL + "/auth/getHistory", {
       method: "GET",
+      headers: { authtoken: cookies.get("authtoken") || null },
     })
       .then((response) => {
         if (!response.ok) {
@@ -32,6 +39,15 @@ const CarHistory = () => {
         return response.json();
       })
       .then((data) => {
+        //console.log(data);
+        if (data.logout) {
+          notificationHandler({
+            type: "warning",
+            message: "Jelentkezz be újra!",
+          });
+          authC.logout();
+          return;
+        }
         setHistory(data);
       })
       .catch((error) => {

@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthCont } from "../Services/AuthContext";
 import { NotificationCont } from "../Services/NotificationContext";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 
 function CarRent(props) {
   const authC = useContext(AuthCont);
@@ -43,6 +45,7 @@ function CarRent(props) {
   async function getRents() {
     await fetch(import.meta.env.VITE_API_URL + `/home/getRents/${authC.user}`, {
       method: "GET",
+      headers: { authtoken: cookies.get("authtoken") || null },
     })
       .then((response) => {
         if (!response.ok) {
@@ -55,6 +58,14 @@ function CarRent(props) {
         return response.json();
       })
       .then((data) => {
+        if (data.logout) {
+          notificationHandler({
+            type: "warning",
+            message: "Jelentkezz be újra!",
+          });
+          authC.logout();
+          return;
+        }
         if (data.success) {
           setUserMoney(data.Money);
           setRentedCars(data.Rents);
@@ -99,6 +110,7 @@ function CarRent(props) {
       }),
       headers: {
         "Content-Type": "application/json",
+        authtoken: cookies.get("authtoken") || null,
       },
     })
       .then((res) => {
@@ -114,6 +126,14 @@ function CarRent(props) {
         return res.json();
       })
       .then((data) => {
+        if (data.logout) {
+          notificationHandler({
+            type: "warning",
+            message: "Jelentkezz be újra!",
+          });
+          authC.logout();
+          return;
+        }
         if (data.success) {
           notificationHandler({
             type: "success",
@@ -166,6 +186,7 @@ function CarRent(props) {
       }),
       headers: {
         "Content-Type": "application/json",
+        authtoken: cookies.get("authtoken") || null,
       },
     })
       .then((res) => {
@@ -181,6 +202,14 @@ function CarRent(props) {
         return res.json();
       })
       .then((data) => {
+        if (data.logout) {
+          notificationHandler({
+            type: "warning",
+            message: "Jelentkezz be újra!",
+          });
+          authC.logout();
+          return;
+        }
         if (data.success) {
           notificationHandler({
             type: "success",
@@ -328,6 +357,7 @@ function CarRent(props) {
       }),
       headers: {
         "Content-Type": "application/json",
+        authtoken: cookies.get("authtoken") || null,
       },
     })
       .then((res) => {
@@ -343,6 +373,14 @@ function CarRent(props) {
         return res.json();
       })
       .then((data) => {
+        if (data.logout) {
+          notificationHandler({
+            type: "warning",
+            message: "Jelentkezz be újra!",
+          });
+          authC.logout();
+          return;
+        }
         if (data.success) {
           notificationHandler({
             type: "success",

@@ -30,11 +30,6 @@ const Navbar = (props) => {
     }
   }, [authC.theme]);
 
-  useEffect(() => {
-    // Az admin jogok lekérdezése és beállítása (például AuthContext-ből)
-    menuCheck();
-  }, [authC]);
-
   const handleToggle = () => {
     setIsToggled(!isToggled);
 
@@ -58,6 +53,7 @@ const Navbar = (props) => {
         id: 1,
       });
     }
+
     if (authC.isAdmin()) {
       dynamicNavigation.push(
         {
@@ -79,6 +75,10 @@ const Navbar = (props) => {
 
     setNavigation(dynamicNavigation);
   }
+  useEffect(() => {
+    // Az admin jogok lekérdezése és beállítása (például AuthContext-ből)
+    menuCheck();
+  }, [authC, authC.userRights]);
   //console.log(navigation[3]);
   /*
   const navigation = [
@@ -105,8 +105,6 @@ const Navbar = (props) => {
   };
   const Logout = () => {
     authC.logout();
-
-    navitage("/autoKolcsonzes/Főoldal");
     notificationHandler({ type: "success", message: "Sikeres kijelentkezés" });
   };
   return (

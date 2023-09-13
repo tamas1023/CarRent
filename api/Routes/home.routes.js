@@ -5,11 +5,11 @@ const homeController = require("../Controllers/home.controller");
 //majd az auth check eknél kell
 const authMiddleware = require("../Middlewares/auth.middleware.js");
 
-Router.get("/getRents/:user", homeController.getRents);
+Router.get("/getRents/:user", authMiddleware.isAuth, homeController.getRents);
 Router.get("/getCars", homeController.getCars);
 Router.get("/getCar/:id", homeController.getCar);
-Router.post("/rentCar", homeController.rentCar);
-Router.post("/toZero", homeController.toZero);
-Router.post("/AddMoney", homeController.AddMoney);
-Router.post("/stopRent", homeController.stopRent);
+Router.post("/rentCar", authMiddleware.isAuth, homeController.rentCar);
+Router.post("/toZero", authMiddleware.isAuth, homeController.toZero);
+Router.post("/AddMoney", authMiddleware.isAuth, homeController.AddMoney);
+Router.post("/stopRent", authMiddleware.isAuth, homeController.stopRent);
 module.exports = Router;

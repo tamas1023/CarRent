@@ -25,22 +25,24 @@ Tervek backend el: (NextJs)
 singlecar started,(need cleanup)
 
 TODO:
-    nálam gyakran lejár, de sztem egyenlőre így jó
-    ha lejár akkor újat kell kérni
-    ha kijelentkeznénk akkor ne lehessen ugyan azzal a tokennel belépni,
-    ez lehet úgy is ahogy az Erik csinálta, vagy sztem 10 percre beállítom
-    és ha kell újítani akkor megújjitom
-    de mi a feltétele, hogy megújjítsam a tokent?
+    //nálam gyakran lejár, de sztem egyenlőre így jó
+    //ha lejár akkor újat kell kérni
+    //ha kijelentkeznénk akkor ne lehessen ugyan azzal a tokennel belépni,
+    //ez lehet úgy is ahogy az Erik csinálta, vagy sztem 10 percre beállítom
+    //és ha kell újítani akkor megújjitom
+    //de mi a feltétele, hogy megújjítsam a tokent?
     
 
-TODO:az admin jog nem az autc user==admin döntse el ,hanem a rightID alapján
+
 először működjön minden lekérdezés, utána lehet a védelemre ráállni pl: axios?? és jwt!
 
-JWT almost finished, proper token check and refrect check needed
-A normális ki logoutolás, és token törlés akkor működik még csak ha manuálisan újratöltjük a weboldalt,
-Meg kell oldani, hogy ha lejár az aktuális token, akkor kidobjon autómatikusan
 
-Erik től a header ből való átolvasást lenézni??
-autó hozzáadás statikus kép
+TODO: autó hozzáadás statikus kép, profil és beállítások elkészítése (profilkép, jelszó váltás stb.)
+
 a lekéréseket (Post, Get) áttehetném a context be, hogy egy helyen legyen az összes lekérdezés
-profil és beállítások elkészítése (profilkép, jelszó válltás stb.)
+
+TODO:Admin page videó vagy elérhetővé tétele, az ÉLES WEBOLDALON!!
+
+HA MINDEN MEGVAN, akkor a kódot tisztítsuk le, pl többször használunk ugyan olyan. vagy hasonló dolgokat (pls fetch)
+azt szervezzük ki, tisztítsuk meg, a regisztrcásiót, pl vigyük át az authcontext be
+De Eriktől is kérdezzük meg, hogy mit mond rá
