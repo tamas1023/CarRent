@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthCont } from "../Services/AuthContext";
 import { NotificationCont } from "../Services/NotificationContext";
@@ -7,7 +7,6 @@ function CarRent(props) {
   const authC = useContext(AuthCont);
   const { notificationHandler } = useContext(NotificationCont);
   const navitage = useNavigate();
-  /*
   const cars = JSON.parse(localStorage.getItem("cars"));
   //localStorage.removeItem("rents");
   const rents = JSON.parse(localStorage.getItem("rents"));
@@ -28,12 +27,6 @@ function CarRent(props) {
   const [history, setHistory] = useState(
     JSON.parse(localStorage.getItem("history")) || []
   );
-  */
-  const [userMoney, setUserMoney] = useState(0);
-  //a rents táblából a kocsik, a kocsik adatait még le kell kérni
-  const [rentedCars, setRentedCars] = useState([]);
-  //a cars táblából jön
-  const [rentedCarsDetails, setRentedCarsDetails] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const [wantToStopRent, setWantToStopRent] = useState(-1);
@@ -41,31 +34,21 @@ function CarRent(props) {
   const payAmountRef = useRef(0);
 
   async function getRents() {
-    await fetch(import.meta.env.VITE_API_URL + `/home/getRents/${authC.user}`, {
+    await fetch(import.meta.env.VITE_API_URL + "/home/getRents", {
       method: "GET",
+      body: JSON.stringify({ UserName: authC.user }),
     })
       .then((response) => {
+        // Ellenőrizd a választ, hogy biztosítsd, hogy a kérés sikeres volt
         if (!response.ok) {
-          notificationHandler({
-            type: "error",
-            message: "HTTP Hiba!",
-          });
-          return null;
+          throw new Error("A kérés sikertelen volt");
         }
-        return response.json();
+        return response.json(); // Válasz JSON formátumban
       })
       .then((data) => {
-        if (data.success) {
-          setUserMoney(data.Money);
-          setRentedCars(data.Rents);
-          setRentedCarsDetails(data.Cars);
-          //navitage("/autoKolcsonzes/Főoldal");
-        } else {
-          notificationHandler({
-            type: "error",
-            message: data.msg,
-          });
-        }
+        // Feldolgozni és menteni a kapott adatot a state-be
+
+        setCars(data);
       })
       .catch((error) => {
         // Kezelni a hibát itt, például naplózás vagy felhasználó értesítése
@@ -77,8 +60,7 @@ function CarRent(props) {
     getRents();
   }, []);
 
-  const toZero = async () => {
-    /*
+  const toZero = () => {
     if (onePayment.money < 0) {
       onePayment.money = 0;
 
@@ -90,55 +72,10 @@ function CarRent(props) {
         message: "Sikeres kiegyenlítés",
       });
     }
-    */
-    //pénz beállítása 0 ra
-    await fetch(import.meta.env.VITE_API_URL + `/home/toZero`, {
-      method: "POST",
-      body: JSON.stringify({
-        UserName: authC.user,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        //console.log(res.ok);
-        if (!res.ok) {
-          notificationHandler({
-            type: "error",
-            message: "HTTP Hiba!",
-          });
-          return null;
-        }
-        //itt a res.json az a következőben a data?? ha jól tudom
-        return res.json();
-      })
-      .then((data) => {
-        if (data.success) {
-          notificationHandler({
-            type: "success",
-            message: data.msg,
-          });
-
-          setUserMoney(data.Money);
-          //navitage("/autoKolcsonzes/Bérlés");
-        } else {
-          notificationHandler({
-            type: "error",
-            message: data.msg,
-          });
-        }
-      })
-      .catch((error) => {
-        notificationHandler({
-          type: "error",
-          message: "Hiba történt:" + error,
-        });
-      });
   };
-  const addMoney = async () => {
+  const addMoney = () => {
     //const inputAmount = prompt("Add meg a mennyiséget: ");
-    /*
+
     if (payAmountRef.current !== null && !isNaN(payAmountRef.current)) {
       const amount = parseInt(payAmountRef.current);
       onePayment.money += amount;
@@ -154,58 +91,13 @@ function CarRent(props) {
         message: "Sikeres pénz hozzáadás",
       });
     }
-    */
-    //a meglévőhöz hozzá kell adni
-    const amount = parseInt(payAmountRef.current);
-    const newAmount = amount + userMoney;
-    await fetch(import.meta.env.VITE_API_URL + `/home/AddMoney`, {
-      method: "POST",
-      body: JSON.stringify({
-        UserName: authC.user,
-        Money: newAmount,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        //console.log(res.ok);
-        if (!res.ok) {
-          notificationHandler({
-            type: "error",
-            message: "HTTP Hiba!",
-          });
-          return null;
-        }
-        //itt a res.json az a következőben a data?? ha jól tudom
-        return res.json();
-      })
-      .then((data) => {
-        if (data.success) {
-          notificationHandler({
-            type: "success",
-            message: data.msg,
-          });
-
-          setUserMoney(newAmount);
-          //navitage("/autoKolcsonzes/Bérlés");
-        } else {
-          notificationHandler({
-            type: "error",
-            message: data.msg,
-          });
-        }
-      })
-      .catch((error) => {
-        notificationHandler({
-          type: "error",
-          message: "Hiba történt:" + error,
-        });
-      });
   };
-
-  const stopRent = async (id) => {
-    /*
+  //console.log(rents);
+  //console.log(cars);
+  //console.log("History");
+  //console.log(history);
+  //localStorage.removeItem("history");
+  const stopRent = (id) => {
     const oneRent = rents.filter((rent) => rent.id === id)[0];
     const startDate = new Date(oneRent.date);
     const currentDate = new Date();
@@ -272,102 +164,10 @@ function CarRent(props) {
       type: "success",
       message: "Sikeres bérlés megszűntetés",
     });
-    */
-    //pénzt levonni a dátum alapján
-    //kitörölni a rents táblából az elemet, a car.rented átállítani 0 ra,
-    //és a history hoz hozzáadni
-    //console.log(rentedCars);
-    //console.log(id);
-    const selectStartDate = rentedCars.filter((car) => {
-      return car.CarID === id;
-    });
-    //console.log(selectStartDate[0].Date);
-    const startDate = new Date(selectStartDate[0].Date);
-    const currentDate = new Date();
-    const timeDifferenceMillis = currentDate.getTime() - startDate.getTime();
-    const hoursPassed = Math.ceil(timeDifferenceMillis / (1000 * 60 * 60));
-    const selectedRentCar = rentedCarsDetails.filter((car) => {
-      return car.ID === id;
-    });
-    //Ez maradt a felhasználó pénzéből
-    //console.log(selectedRentCar[0].Value);
-    let theCarPayment = userMoney;
-    theCarPayment -= hoursPassed * selectedRentCar[0].Value;
-    //console.log(theCarPayment);
-    const formattedDate1 = startDate.toLocaleString("hu-HU", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-
-    const formattedDate2 = currentDate.toLocaleString("hu-HU", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-    //console.log(formattedDate1);
-    //console.log(formattedDate2);
-    //console.log(selectedRentCar[0].ID);
-
-    await fetch(import.meta.env.VITE_API_URL + `/home/stopRent`, {
-      method: "POST",
-      body: JSON.stringify({
-        UserName: authC.user,
-        CarID: selectedRentCar[0].ID,
-        Money: theCarPayment,
-        CarName: selectedRentCar[0].Name,
-        startDate: formattedDate1,
-        currentDate: formattedDate2,
-        Value: selectedRentCar[0].Value,
-        Description: selectedRentCar[0].Description,
-        Image: selectedRentCar[0].Image,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        //console.log(res.ok);
-        if (!res.ok) {
-          notificationHandler({
-            type: "error",
-            message: "HTTP Hiba!",
-          });
-          return null;
-        }
-        //itt a res.json az a következőben a data?? ha jól tudom
-        return res.json();
-      })
-      .then((data) => {
-        if (data.success) {
-          notificationHandler({
-            type: "success",
-            message: data.msg,
-          });
-          authC.setNavId(0);
-          navitage("/autoKolcsonzes/Főoldal");
-        } else {
-          notificationHandler({
-            type: "error",
-            message: data.msg,
-          });
-        }
-      })
-      .catch((error) => {
-        notificationHandler({
-          type: "error",
-          message: "Hiba történt:" + error,
-        });
-      });
   };
   const amountChange = (e) => {
     payAmountRef.current = e.target.value;
   };
-
   const Modal = ({ onCancel, onConfirm }) => {
     const modalText =
       modalContent === "kiegyenlites"
@@ -445,7 +245,7 @@ function CarRent(props) {
 
   return (
     <div>
-      <h1 className="ml-2">{userMoney} pénzed van</h1>
+      <h1 className="ml-2">{onePayment.money} pénzed van</h1>
       <button
         className=" mb-2 ml-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 rounded-md p-2 text-white"
         onClick={() => {
@@ -468,30 +268,30 @@ function CarRent(props) {
         className="grid "
         style={{ gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))" }}
       >
-        {rentedCarsDetails.map((car) => (
+        {rentedCars.map((car) => (
           <div
-            key={car.ID}
+            key={car.id}
             className={`border-solid border-2 border-sky-700 flex flex-col rounded-lg overflow-hidden shadow-md ${
               rentedCars.length === 1 ? "p-4 w-80 m-auto" : "p-4 m-10"
             }`}
           >
             <div className="flex-shrink-0">
               <img
-                src={car.Image}
-                alt={car.Name}
+                src={car.kép}
+                alt={car.név}
                 className="w-full h-48 object-cover"
               />
             </div>
             <div className="flex-grow">
-              <h2 className="text-xl font-semibold mb-2">{car.Name}</h2>
-              <p className="text-slate-200">{car.Description}</p>
-              <p className="text-slate-300 mt-2">Ár: {car.Value}/óra</p>
+              <h2 className="text-xl font-semibold mb-2">{car.név}</h2>
+              <p className="text-slate-200">{car.leírás}</p>
+              <p className="text-slate-300 mt-2">Ár: {car.ára}/óra</p>
             </div>
             <button
               className="block w-full mb-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 rounded-md p-2 "
               onClick={() => {
                 setModalContent("rent");
-                setWantToStopRent(car.ID);
+                setWantToStopRent(car.id);
                 setShowModal(true);
               }}
             >

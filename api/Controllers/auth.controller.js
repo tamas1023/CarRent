@@ -2,7 +2,6 @@ const { where } = require("sequelize");
 const Cars = require("../Models/cars.modell");
 const sequelize = require("../Models/connection.modell");
 const Users = require("../Models/users.modell");
-const History = require("../Models/history.modell");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { QueryTypes } = require("sequelize");
@@ -16,13 +15,6 @@ const {
 exports.authCheck = async (req, res) => {
   console.log("authCheck");
   res.send({ message: "authCheck" });
-};
-*/
-exports.getHistory = async (req, res) => {
-  //console.log("authCheck");
-  //res.send({ message: "authCheck" });
-  const getHistory = await History.findAll({});
-  return res.send(getHistory);
 };
 /*
 exports.test = async (req, res) => {
