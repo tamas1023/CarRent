@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate, Navigate, json } from "react-router-dom";
 import { AuthCont } from "../Services/AuthContext";
 import { NotificationCont } from "../Services/NotificationContext";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 
 function SingleCar(props) {
   const param = useParams();

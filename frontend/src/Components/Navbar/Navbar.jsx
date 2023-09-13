@@ -12,7 +12,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 const Navbar = (props) => {
-  const navitage = useNavigate();
+  const navigate = useNavigate();
   const authC = useContext(AuthCont);
   const { notificationHandler } = useContext(NotificationCont);
   const [navigation, setNavigation] = useState([]);
@@ -107,6 +107,7 @@ const Navbar = (props) => {
     authC.logout();
     notificationHandler({ type: "success", message: "Sikeres kijelentkezés" });
   };
+
   return (
     <>
       <Disclosure as="nav" className="bg-gray-800">
@@ -187,6 +188,19 @@ const Navbar = (props) => {
                           leaveTo="transform opacity-0 scale-95"
                         >
                           <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <Menu.Item>
+                              {({ active }) => (
+                                <Link
+                                  to={`/autoKolcsonzes/Profil`}
+                                  className={classNames(
+                                    active ? "bg-gray-100" : "",
+                                    "block px-4 py-2 text-sm text-gray-700"
+                                  )}
+                                >
+                                  Profil
+                                </Link>
+                              )}
+                            </Menu.Item>
                             <Menu.Item>
                               {({ active }) => (
                                 <Link

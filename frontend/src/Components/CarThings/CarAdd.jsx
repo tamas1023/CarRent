@@ -40,7 +40,7 @@ function CarAdd(props) {
       type: "text",
     },
     {
-      név: "Kép (URL)",
+      név: "Kép (URL), egyenlőre statikus lesz",
       name: "Image",
       placeholder: "Az autó képe",
       type: "text",
@@ -52,9 +52,16 @@ function CarAdd(props) {
     //const updatedCars = [...cars, { ...car, id: generateUniqueId() }];
     //localStorage.setItem("cars", JSON.stringify(updatedCars));
     // ide egy beszúrás fell hogy következzen
+    const updatedCar = {
+      ...car,
+      Image:
+        "https://upload.wikimedia.org/wikipedia/commons/c/cf/Volkswagen_Beetle_.jpg",
+    };
+
+    //console.log(updatedCar);
     await fetch(import.meta.env.VITE_API_URL + "/auth/carAdd", {
       method: "POST",
-      body: JSON.stringify(car),
+      body: JSON.stringify(updatedCar),
       headers: {
         "Content-Type": "application/json", // Megmondjuk a szervernek, hogy JSON adatot küldünk
         authtoken: cookies.get("authtoken") || null,

@@ -37,7 +37,15 @@ TODO:
 először működjön minden lekérdezés, utána lehet a védelemre ráállni pl: axios?? és jwt!
 
 
+
+
 TODO: autó hozzáadás statikus kép, profil és beállítások elkészítése (profilkép, jelszó váltás stb.)
+ha a név változik, akkor az változzon a history ban is a nevek
+ha a jelszó, vagy név, vagy email nem változik, akkor vagy nem küldjük el, vagy valahol le kell kezelni,
+hogy akkor azokat ne update elje
+
+
+
 
 a lekéréseket (Post, Get) áttehetném a context be, hogy egy helyen legyen az összes lekérdezés
 

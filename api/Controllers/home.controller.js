@@ -5,8 +5,118 @@ const { where } = require("sequelize");
 const Users = require("../Models/users.modell");
 const History = require("../Models/history.modell");
 
-exports.getCars = async (req, res) => {
+const {
+  lengthCheck,
+  numberCheck,
+  lowerUpperCheck,
+} = require("../Services/pass.service");
+exports.userUpdate = async (req, res) => {
+  const t = await sequelize.transaction();
+
+  const { UserName, Password, Password2, Email } = req.body;
+  if (!UserName || !Email) {
+    await t.rollback();
+    return res.send({
+      success: false,
+      msg: "Hiányzó felhasználónév vagy email!",
+    });
+  }
+  //ha nem vátozott a jelszó akkor ne csináljon semmit a jelszóval,
+  //és ne frissítse a jelszót
+  if (Password == null && Password2 == null) {
+  }
+  if (Password != Password2) {
+    await t.rollback();
+    return res.send({
+      success: false,
+      msg: "A megadott jelszavak nem egyeznek!",
+    });
+  }
+  if (!lengthCheck(Password)) {
+    await t.rollback();
+    return res.send({
+      success: false,
+      msg: "A megadott jelszónak min. 8 karakternek kell lennie!",
+    });
+  }
+  if (!numberCheck(Password)) {
+    await t.rollback();
+    return res.send({
+      success: false,
+      msg: "A megadott jelszónak tartalmaznia kell számot!",
+    });
+  }
+  if (!lowerUpperCheck(Password)) {
+    return res.send({
+      success: false,
+      msg: "A megadott jelszónak tartalmaznia kell kis- és nagybetűket is!",
+    });
+  }
+
+  const hashPassword = await bcrypt.hash(Password, 10);
+  const emailCheck = await Users.findOne({ where: { Email: Email } });
+  const userNameCheck = await Users.findOne({ where: { UserName: UserName } });
+
+  if (userNameCheck) {
+    await t.rollback();
+    return res.send({
+      success: false,
+      msg: "Ezzel a felhasználó névvel már regisztráltak!",
+    });
+  }
+  if (emailCheck) {
+    await t.rollback();
+    return res.send({
+      success: false,
+      msg: "Ezzel az email címmel már regisztráltak!",
+    });
+  }
+  /*
+  const insertUser = await Users.create(
+    {
+      UserName: UserName,
+      Password: hashPassword,
+      Email: Email,
+      Money: 0,
+      RegDate: new Date(),
+      //1 az felhasználó, 2 az admin
+      RightsId: 1,
+    },
+    { transaction: t }
+  );
   
+  if (!insertUser) {
+    await t.rollback();
+    return res.send({ success: false, msg: "Regisztrációs hiba!" });
+  }
+  */
+  await t.commit();
+  return res.send({ success: true, msg: "Sikeres regisztráció!" });
+  //return res.send({ success: true, msg: "Tesztelek" });
+};
+exports.getProfil = async (req, res) => {
+  const { user } = req.params;
+
+  const oneUser = await Users.findOne({
+    where: {
+      UserName: user,
+    },
+    attributes: {
+      exclude: ["Password", "ID", "Money", "RegDate", "RightsId", "State"],
+    },
+  });
+
+  if (!oneUser) {
+    return res.send({ success: false, msg: "Nincs ilyen személy!" });
+  }
+
+  return res.send({
+    success: true,
+    msg: "Sikeres lekérések",
+    userData: oneUser,
+  });
+};
+exports.getCars = async (req, res) => {
   const cars = await Cars.findAll({
     //attributes: ["ID"],
   });

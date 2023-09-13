@@ -18,6 +18,7 @@ import Notification from "../Utilities/Notification";
 import ToHome from "../404/ToHome";
 import CarHistory from "../CarThings/CarHistory";
 import Registration from "../Auth/Registration";
+import Profil from "../Auth/Profil";
 
 const MainContent = () => {
   return (
@@ -44,6 +45,16 @@ const MainContent = () => {
               <AuthProtection>
                 <LoggedPageHolder title={"Bérlés"}>
                   <CarRent />
+                </LoggedPageHolder>
+              </AuthProtection>
+            }
+          />
+          <Route
+            path="/autoKolcsonzes/Profil/*"
+            element={
+              <AuthProtection>
+                <LoggedPageHolder title={"Profil"}>
+                  <Profil />
                 </LoggedPageHolder>
               </AuthProtection>
             }
