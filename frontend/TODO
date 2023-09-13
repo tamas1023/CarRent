@@ -25,12 +25,12 @@ Tervek backend el: (NextJs)
 singlecar started,(need cleanup)
 
 TODO:
-    //nálam gyakran lejár, de sztem egyenlőre így jó
-    //ha lejár akkor újat kell kérni
-    //ha kijelentkeznénk akkor ne lehessen ugyan azzal a tokennel belépni,
-    //ez lehet úgy is ahogy az Erik csinálta, vagy sztem 10 percre beállítom
-    //és ha kell újítani akkor megújjitom
-    //de mi a feltétele, hogy megújjítsam a tokent?
+    nálam gyakran lejár, de sztem egyenlőre így jó
+    ha lejár akkor újat kell kérni
+    ha kijelentkeznénk akkor ne lehessen ugyan azzal a tokennel belépni,
+    ez lehet úgy is ahogy az Erik csinálta, vagy sztem 10 percre beállítom
+    és ha kell újítani akkor megújjitom
+    de mi a feltétele, hogy megújjítsam a tokent?
     
 
 TODO:az admin jog nem az autc user==admin döntse el ,hanem a rightID alapján
