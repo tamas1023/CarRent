@@ -522,11 +522,11 @@ function CarRent(props) {
             </div>
             <div className="flex-grow">
               <h2 className="text-xl font-semibold mb-2">{car.Name}</h2>
-              <p className="text-slate-200">{car.Description}</p>
-              <p className="text-slate-300 mt-2">Ár: {car.Value}/óra</p>
+              <p className="">{car.Description}</p>
+              <p className=" mt-2">Ár: {car.Value}/óra</p>
             </div>
             <button
-              className="block w-full mb-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 rounded-md p-2 "
+              className="block w-full mb-2 text-white bg-blue-500 hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 rounded-md p-2 "
               onClick={() => {
                 setModalContent("rent");
                 setWantToStopRent(car.ID);

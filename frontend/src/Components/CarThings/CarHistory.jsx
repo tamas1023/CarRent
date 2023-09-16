@@ -135,10 +135,10 @@ const CarHistory = () => {
             </div>
             <div className="flex-grow">
               <h2 className="text-xl font-semibold mb-2">{car.CarName}</h2>
-              <p className="text-slate-200">{car.Description}</p>
-              <p className="text-slate-300 mt-2">Ár: {car.Value}/óra</p>
-              <p className="text-slate-200">Kezdeti dátum: {car.StartDate}</p>
-              <p className="text-slate-300 mt-2">Vége dátum: {car.EndDate}</p>
+              <p className="">{car.Description}</p>
+              <p className=" mt-2">Ár: {car.Value}/óra</p>
+              <p className="">Kezdeti dátum: {car.StartDate}</p>
+              <p className=" mt-2">Vége dátum: {car.EndDate}</p>
             </div>
           </div>
         ))}

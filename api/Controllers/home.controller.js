@@ -4,7 +4,10 @@ const Rents = require("../Models/rents.modell");
 const { where } = require("sequelize");
 const Users = require("../Models/users.modell");
 const History = require("../Models/history.modell");
-
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const { QueryTypes } = require("sequelize");
+const { dateToString } = require("../Services/date.service");
 const {
   lengthCheck,
   numberCheck,
@@ -13,7 +16,8 @@ const {
 exports.userUpdate = async (req, res) => {
   const t = await sequelize.transaction();
 
-  const { UserName, Password, Password2, Email } = req.body;
+  const { UserName, Password, Password2, Email, UserID } = req.body;
+  const updateData = {};
   if (!UserName || !Email) {
     await t.rollback();
     return res.send({
@@ -23,54 +27,97 @@ exports.userUpdate = async (req, res) => {
   }
   //ha nem vátozott a jelszó akkor ne csináljon semmit a jelszóval,
   //és ne frissítse a jelszót
-  if (Password == null && Password2 == null) {
-  }
-  if (Password != Password2) {
-    await t.rollback();
-    return res.send({
-      success: false,
-      msg: "A megadott jelszavak nem egyeznek!",
-    });
-  }
-  if (!lengthCheck(Password)) {
-    await t.rollback();
-    return res.send({
-      success: false,
-      msg: "A megadott jelszónak min. 8 karakternek kell lennie!",
-    });
-  }
-  if (!numberCheck(Password)) {
-    await t.rollback();
-    return res.send({
-      success: false,
-      msg: "A megadott jelszónak tartalmaznia kell számot!",
-    });
-  }
-  if (!lowerUpperCheck(Password)) {
-    return res.send({
-      success: false,
-      msg: "A megadott jelszónak tartalmaznia kell kis- és nagybetűket is!",
-    });
-  }
+  //megnézni, ha a név vagy email cím amit talát megeggyezik az ID jük, akkor az a változás
+  //végbe menet, fülönben nem hajtódhat végre
 
-  const hashPassword = await bcrypt.hash(Password, 10);
   const emailCheck = await Users.findOne({ where: { Email: Email } });
   const userNameCheck = await Users.findOne({ where: { UserName: UserName } });
-
+  /*
+  console.log("----------------");
+  console.log(UserID);
+  console.log(userNameCheck.ID);
+  console.log(emailCheck.ID);
+  */
   if (userNameCheck) {
+    if (userNameCheck.ID == UserID) {
+      updateData.UserName = UserName;
+    }
+    //console.log("Ugyan az a felhasználó");
+
+    //ha a 2 id megeggyezik akkor az ugyan az a felhasználó
+
+    /*
     await t.rollback();
     return res.send({
       success: false,
       msg: "Ezzel a felhasználó névvel már regisztráltak!",
     });
+    */
+  } else {
+    //ha nem talált eggyezést
+    updateData.UserName = UserName;
   }
   if (emailCheck) {
+    if (emailCheck.ID == UserID) {
+      updateData.Email = Email;
+    }
+
+    /*
     await t.rollback();
     return res.send({
       success: false,
       msg: "Ezzel az email címmel már regisztráltak!",
     });
+    */
+  } else {
+    updateData.Email = Email;
   }
+  if (Password != "") {
+    //console.log("Nem üres első jelszó");
+    if (Password != Password2) {
+      await t.rollback();
+      return res.send({
+        success: false,
+        msg: "A megadott jelszavak nem egyeznek!",
+      });
+    }
+    if (!lengthCheck(Password)) {
+      await t.rollback();
+      return res.send({
+        success: false,
+        msg: "A megadott jelszónak min. 8 karakternek kell lennie!",
+      });
+    }
+    if (!numberCheck(Password)) {
+      await t.rollback();
+      return res.send({
+        success: false,
+        msg: "A megadott jelszónak tartalmaznia kell számot!",
+      });
+    }
+    if (!lowerUpperCheck(Password)) {
+      return res.send({
+        success: false,
+        msg: "A megadott jelszónak tartalmaznia kell kis- és nagybetűket is!",
+      });
+    }
+    const hashPassword = await bcrypt.hash(Password, 10);
+    updateData.Password = hashPassword;
+  }
+  //console.log(updateData);
+
+  const updateUser = await Users.update(updateData, {
+    where: {
+      ID: UserID,
+    },
+    transaction: t,
+  });
+
+  if (!updateUser) {
+    await t.rollback();
+    return res.send({ success: false, msg: "Adat módosítás hiba!" });
+  }
+
   /*
   const insertUser = await Users.create(
     {
@@ -90,8 +137,38 @@ exports.userUpdate = async (req, res) => {
     return res.send({ success: false, msg: "Regisztrációs hiba!" });
   }
   */
+  //a jelenlegi auth tokent le kell tiltani
+  const { authtoken } = req.headers;
+  const results = await sequelize.query(
+    `INSERT INTO deniedtokens (token, date) VALUES ('${authtoken}','${dateToString(
+      new Date()
+    )}')`,
+    QueryTypes.INSERT,
+    { transaction: t }
+  );
+
+  if (!results) {
+    await t.rollback();
+    return res.send({ success: false, msg: "Token tiltási hiba!" });
+  }
+  //Új tokent kell generálni!!
+  const token = await jwt.sign(
+    { name: UserName },
+    process.env.ACCESS_TOKEN_KEY,
+    {
+      expiresIn: "1h",
+    }
+  );
+  if (!token) {
+    return res.send({ success: false, msg: "Token hiba!" });
+  }
   await t.commit();
-  return res.send({ success: true, msg: "Sikeres regisztráció!" });
+  const updateDataLength = Object.keys(updateData).length;
+  return res.set({ authtoken: token }).send({
+    success: true,
+    msg: `Sikeres adat módosítás! ${updateDataLength}db`,
+    user: UserName,
+  });
   //return res.send({ success: true, msg: "Tesztelek" });
 };
 exports.getProfil = async (req, res) => {
@@ -102,7 +179,7 @@ exports.getProfil = async (req, res) => {
       UserName: user,
     },
     attributes: {
-      exclude: ["Password", "ID", "Money", "RegDate", "RightsId", "State"],
+      exclude: ["Password", "Money", "RegDate", "RightsId", "State"],
     },
   });
 

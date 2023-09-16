@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { NotificationCont } from "../Services/NotificationContext";
 import { AuthCont } from "../Services/AuthContext";
 import Cookies from "universal-cookie";
+import { useNavigate } from "react-router-dom";
 const cookies = new Cookies();
 
 const Profil = () => {
@@ -11,6 +12,8 @@ const Profil = () => {
   const pass = useRef(null);
   const pass2 = useRef(null);
   const authC = useContext(AuthCont);
+  const navigate = useNavigate();
+
   async function getProfil() {
     await fetch(
       import.meta.env.VITE_API_URL + `/home/getProfil/${authC.user}`,
@@ -83,11 +86,11 @@ const Profil = () => {
     setUserData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
   const Change = async () => {
+    /*
     console.log(userData);
     console.log(pass.current.value);
     console.log(pass2.current.value);
-
-    /*
+    */
     await fetch(import.meta.env.VITE_API_URL + "/home/userUpdate", {
       method: "POST",
 
@@ -96,9 +99,11 @@ const Profil = () => {
         Password: pass.current.value,
         Password2: pass2.current.value,
         Email: userData.Email,
+        UserID: userData.ID,
       }),
       headers: {
         "Content-Type": "application/json", // Megmondjuk a szervernek, hogy JSON adatot küldünk
+        authtoken: cookies.get("authtoken") || null,
       },
     })
       .then((res) => {
@@ -109,13 +114,9 @@ const Profil = () => {
           });
           return null;
         }
-
+        //azért mert ha az adatainkat frissítjük akkor az auth tokent is kell
+        cookies.set("authtoken", res.headers.get("authtoken"), { path: "/" });
         return res.json();
-        //console.log(res.headers.get("authtoken"));
-
-        //cookies.set("authtoken", res.headers.get("authtoken"), { path: "/" });
-        //return res.json();
-        //return res.json(); // Válasz JSON formátumban
       })
       .then((data) => {
         if (data.logout) {
@@ -123,7 +124,7 @@ const Profil = () => {
             type: "warning",
             message: "Jelentkezz be újra!",
           });
-          authC.logout();
+
           return;
         }
         if (data.success) {
@@ -131,10 +132,13 @@ const Profil = () => {
             type: "success",
             message: data.msg,
           });
-          //console.log(res.headers.get("authtoken"));
-          //console.log(data.userrights);
+          //ide amit akarunk csinálni, ha minden jó lesz
+          //be "loginoltatni" a változásokat
 
-          navigate("/autoKolcsonzes/Főoldal");
+          //Új tokent kell generálni??
+          authC.login(data.user, authC.userRights);
+          navigate("/autoKolcsonzes/Profil");
+          //navigate("/autoKolcsonzes/");
         } else {
           notificationHandler({
             type: "error",
@@ -151,7 +155,6 @@ const Profil = () => {
           message: "Hiba történt:Login  " + error,
         });
       });
-      */
   };
   const Modal = ({ onCancel, onConfirm }) => {
     return (
@@ -182,7 +185,7 @@ const Profil = () => {
       <div className="bg-white rounded-md shadow-md p-6 w-96 mt-2 m-auto">
         <h1 className="text-2xl font-semibold mb-6 text-black">Profil</h1>
         <p className="text-black">
-          Ha nem akarsz valamit válltoztatni, ne érj bele
+          Ha nem akarsz valamit válltoztatni valamit, akkor ne változtasd meg.
         </p>
         <br />
         <div className="grid gap-4">

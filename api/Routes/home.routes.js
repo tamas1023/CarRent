@@ -5,7 +5,7 @@ const homeController = require("../Controllers/home.controller");
 //majd az auth check eknél kell
 const authMiddleware = require("../Middlewares/auth.middleware.js");
 
-Router.get("/userUpdate", authMiddleware.isAuth, homeController.userUpdate);
+Router.post("/userUpdate", authMiddleware.isAuth, homeController.userUpdate);
 Router.get("/getProfil/:user", homeController.getProfil);
 Router.get("/getRents/:user", authMiddleware.isAuth, homeController.getRents);
 Router.get("/getCars", homeController.getCars);
