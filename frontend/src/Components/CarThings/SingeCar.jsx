@@ -91,12 +91,6 @@ function SingleCar(props) {
 
   const deleteCarById = async (id) => {
     if (!authC.isAdmin()) navitage("/autoKolcsonzes/Főoldal");
-    /*
-    const storedCars = JSON.parse(localStorage.getItem("cars") || "[]");
-    const updatedCars = storedCars.filter((car) => car.id !== id);
-    localStorage.setItem("cars", JSON.stringify(updatedCars));
-    */
-
     await fetch(import.meta.env.VITE_API_URL + `/auth/deleteCar/${id}`, {
       method: "POST",
       headers: { authtoken: cookies.get("authtoken") || null },
@@ -141,35 +135,14 @@ function SingleCar(props) {
           message: "Hiba történt:" + error,
         });
       });
-    /*
-    navitage("/autoKolcsonzes/Főoldal");
-    notificationHandler({ type: "success", message: "Sikeres autó törlés" });
-    */
   };
-  //TODO:ELŐTTE LOGIN REG UTÁNA EZ
+
   const rent = async () => {
     const currentDate = new Date();
     if (!authC.isLoggedIn) return;
     if (car.Rented) {
       return navitage("/autoKolcsonzes/Főoldal");
     }
-    /*
-    oneCar.kiBereltE = true;
-    const storedCars = JSON.parse(localStorage.getItem("cars") || "[]");
-    storedCars[car.id] = oneCar;
-    localStorage.setItem("cars", JSON.stringify(storedCars));
-    const rent = [
-      {
-        id: oneCar.id,
-        username: authC.user,
-        date: currentDate,
-      },
-    ];
-
-    const storedRents = JSON.parse(localStorage.getItem("rents"));
-    const updateStoredRents = storedRents ? [...storedRents, ...rent] : rent;
-    localStorage.setItem("rents", JSON.stringify(updateStoredRents));
-    */
     await fetch(import.meta.env.VITE_API_URL + `/home/rentCar`, {
       method: "POST",
       body: JSON.stringify({
@@ -222,39 +195,13 @@ function SingleCar(props) {
           message: "Hiba történt:" + error,
         });
       });
-    /*
-    navitage("/autoKolcsonzes/Főoldal");
-    notificationHandler({ type: "success", message: "Sikeres autó bérlés" });
-    */
   };
-  /*
-  const oneCar = getItemById(id);
-  if (oneCar.kiBereltE) {
-    navitage("/autoKolcsonzes/Főoldal");
-    return;
-  }
-  const [car, SetCar] = useState({
-    id: parseInt(oneCar.id),
-    név: oneCar.név,
-    ára: parseInt(oneCar.ára),
-    leírás: oneCar.leírás,
-    kép: oneCar.kép,
-    kiBereltE: oneCar.kiBereltE,
-  });
-  */
-
-  //IDE KELL MAJD USEEFFECT FÖLLÜLRE
 
   const handleChange = (e) => {
     SetCar((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
   const changeCar = async () => {
     if (!authC.isAdmin()) navitage("/autoKolcsonzes/Főoldal");
-    /*
-    const storedCars = JSON.parse(localStorage.getItem("cars") || "[]");
-    storedCars[car.id] = car;
-    localStorage.setItem("cars", JSON.stringify(storedCars));
-    */
     await fetch(import.meta.env.VITE_API_URL + `/auth/changeCar/${id}`, {
       method: "POST",
       body: JSON.stringify(car),
@@ -303,10 +250,6 @@ function SingleCar(props) {
           message: "Hiba történt:" + error,
         });
       });
-    /*
-    navitage("/autoKolcsonzes/Főoldal");
-    notificationHandler({ type: "success", message: "Sikeres autó módosítás" });
-    */
   };
   const ConfirmModal = ({ onCancel, onConfirm }) => {
     let message;

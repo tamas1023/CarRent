@@ -70,37 +70,15 @@ const Navbar = (props) => {
         }
       );
     }
-
     //Mivel kézileg adom hozzá, ezért a current az false ezt kell átírni
-
     setNavigation(dynamicNavigation);
   }
   useEffect(() => {
     // Az admin jogok lekérdezése és beállítása (például AuthContext-ből)
     menuCheck();
   }, [authC, authC.userRights]);
-  //console.log(navigation[3]);
-  /*
-  const navigation = [
-    { name: "Főldal", href: "/Főoldal", current: false, id: 0 },
-    { name: "Bérlés", href: "/Bérlés", current: false, id: 1 },
-    { name: "Autó Hozzáadás", href: "/Hozzáadás", current: false, id: 2 },
-  ];
-  */
 
   const currentChanges = (id) => {
-    /*
-    const updatedNavigation = navigation.map((item) => {
-      if (item.id === id) {
-        return { ...item, current: true };
-      } else {
-        return { ...item };
-      }
-
-    });
-
-    setNavigation(updatedNavigation);
-    */
     authC.setNavId(id);
   };
   const Logout = () => {
@@ -224,15 +202,6 @@ const Navbar = (props) => {
                       <div style={{ display: "inherit" }}>
                         <Link
                           to={"/autoKolcsonzes/Bejelentkezés"}
-                          /*
-                        className={classNames(
-                          navigation[3].current
-                            ? "bg-gray-900 text-white"
-                            : "text-white hover:bg-gray-700 hover:text-white",
-                          "rounded-md px-3 py-2 text-sm font-medium"
-                        )}
-                        */
-
                           className={classNames(
                             "text-white hover:bg-gray-700 hover:text-white",
                             "rounded-md px-3 py-2 text-sm font-medium"

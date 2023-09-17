@@ -12,47 +12,26 @@ const {
   numberCheck,
   lowerUpperCheck,
 } = require("../Services/pass.service");
-/*
-exports.authCheck = async (req, res) => {
-  console.log("authCheck");
-  res.send({ message: "authCheck" });
-};
-*/
 exports.getHistory = async (req, res) => {
-  //console.log("authCheck");
-  //res.send({ message: "authCheck" });
   const getHistory = await History.findAll({});
   return res.send(getHistory);
 };
-/*
-exports.test = async (req, res) => {
-  const cars = await Cars.findAll({
-    //attributes: ["ID"],
-  });
-  //console.log(cars);
-  res.send(cars);
-};
-*/
 exports.userLogin = async (req, res) => {
   try {
     const { Email, Password } = req.body;
-
     //Beérkezett adatok vizsgálata
     if (!Email || !Password) {
       return res.send({ success: false, msg: "Nem adtál meg minden adatot!" });
     }
-
     //Felhasználó lekérése
     const user = await Users.findOne({
       where: {
         Email: Email,
       },
     });
-
     if (!user) {
       return res.send({ success: false, msg: "Hibás email vagy jelszó!" });
     }
-
     //Felhasználó jelszavának vizsgálata
     const isSame = await bcrypt.compare(Password, user.Password);
 
@@ -82,9 +61,6 @@ exports.userLogin = async (req, res) => {
 };
 exports.userReg = async (req, res) => {
   //megnézni, hogy admin jog e, aztán lehet feltenni, de sql injekciót kezelni ha kell??
-  //console.log("Ide bejött!!");
-  //console.log(req.body);
-  //console.log(new Date());
   const t = await sequelize.transaction();
   const { UserName, Password, Password2, Email } = req.body;
   if (!UserName || !Email) {
@@ -165,9 +141,6 @@ exports.userReg = async (req, res) => {
 };
 exports.carAdd = async (req, res) => {
   //megnézni, hogy admin jog e, aztán lehet feltenni, de sql injekciót kezelni ha kell??
-  //console.log("Ide bejött!!");
-  //console.log(req.body);
-
   const t = await sequelize.transaction();
   const { Name, Value, Description, Image, Rented } = req.body;
   if (!Name || !Value) {
@@ -190,7 +163,6 @@ exports.carAdd = async (req, res) => {
   }
   await t.commit();
   return res.send({ success: true, msg: "Sikeres autó felvétel!" });
-  //return res.send({ success: true, msg: "Tesztelek" });
 };
 exports.changeCar = async (req, res) => {
   const { id } = req.params;
@@ -217,7 +189,6 @@ exports.changeCar = async (req, res) => {
   }
   await t.commit();
   return res.send({ success: true, msg: "Sikeres autó módosítás!" });
-  //return res.send({ success: true, msg: "Tesztelek" });
 };
 exports.deleteCar = async (req, res) => {
   const { id } = req.params;
@@ -237,8 +208,6 @@ exports.deleteCar = async (req, res) => {
     await t.commit();
     return res.send({ success: true, msg: "Sikeres autó törlés!" });
   } catch (error) {
-    //console.error("Hiba történt:", error);
-    //res.status(500).json({ error: "Szerverhiba" });
     await t.rollback();
     return res.status(500).send({ success: false, msg: error.message });
   }
@@ -249,18 +218,11 @@ exports.authCheck = async (req, res) => {
   try {
     const { user } = req.body;
     const { authtoken } = req.headers;
-    //console.log("-----------------------------");
-    //console.log(authtoken);
-    /*
-    console.log(user);
-    console.log(user.UserName);
-    */
     //Adatok vizsgálata
     if (!authtoken || !user) {
       await t.rollback();
       return res.send({ success: false, msg: "Hiányzó adatok!" });
     }
-
     //Új Token létrehozása
     const token = await jwt.sign(
       { name: user.UserName },
@@ -274,23 +236,8 @@ exports.authCheck = async (req, res) => {
       await t.rollback();
       return res.send({ success: false, msg: "Token hiba!" });
     }
-    //console.log(token);
-    //console.log(token);
-    //console.log(authtoken);
     if (token != authtoken) {
-      /*
-      return res.send({
-        success: false,
-        msg: "A 2 token nem egyezik de mind a 2 helyes??!",
-      });
-      */
       //Jelenlegi Token letiltása
-      //nálam gyakran lejár, de sztem egyenlőre így jó
-      //ha lejár akkor újat kell kérni
-      //ha kijelentkeznénk akkor ne lehessen ugyan azzal a tokennel belépni,
-      //ez lehet úgy is ahogy az Erik csinálta, vagy sztem 10 percre beállítom
-      //és ha kell újítani akkor megújjitom
-      //de mi a feltétele, hogy megújjítsam a tokent?
       //console.log("2 nem egyezik");
       const results = await sequelize.query(
         `INSERT INTO deniedtokens (token, date) VALUES ('${authtoken}','${dateToString(
@@ -304,13 +251,11 @@ exports.authCheck = async (req, res) => {
         await t.rollback();
         return res.send({ success: false, msg: "Token tiltási hiba!" });
       }
-      //console.log(results);
     }
 
     await t.commit();
     return res.set({ authtoken: token }).send({ success: true, user: user });
   } catch (error) {
-    //console.log(error);
     return res.send({ success: false, msg: "Fatal Error! " + error });
   }
 };

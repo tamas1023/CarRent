@@ -16,29 +16,6 @@ const Login = (props) => {
     navigate("/autoKolcsonzes/Regisztráció");
   };
   const CheckUser = async () => {
-    /*
-    const payments = JSON.parse(localStorage.getItem("payments"));
-    const payment = [
-      {
-        username: username.current.value,
-        money: 0,
-      },
-    ];
-    if (!payments) {
-      localStorage.setItem("payments", JSON.stringify(payment));
-    } else {
-      const existingPayment = payments.find(
-        (payment) => payment.username === username.current.value
-      );
-
-      if (!existingPayment) {
-        const updatedPayments = [...payments, ...payment];
-        localStorage.setItem("payments", JSON.stringify(updatedPayments));
-      }
-    }
-    */
-    //authC.login(username.current.value);
-
     await fetch(import.meta.env.VITE_API_URL + "/auth/userLogin", {
       method: "POST",
 
@@ -60,11 +37,6 @@ const Login = (props) => {
         }
         cookies.set("authtoken", res.headers.get("authtoken"), { path: "/" });
         return res.json();
-        //console.log(res.headers.get("authtoken"));
-
-        //cookies.set("authtoken", res.headers.get("authtoken"), { path: "/" });
-        //return res.json();
-        //return res.json(); // Válasz JSON formátumban
       })
       .then((data) => {
         if (data.success) {
@@ -72,10 +44,7 @@ const Login = (props) => {
             type: "success",
             message: data.msg,
           });
-          //console.log(res.headers.get("authtoken"));
-          //console.log(data.userrights);
           authC.login(data.username, data.userrights);
-
           navigate("/autoKolcsonzes/Főoldal");
         } else {
           notificationHandler({
@@ -93,10 +62,6 @@ const Login = (props) => {
           message: "Hiba történt:Login  " + error,
         });
       });
-    /*
-    navigate("/autoKolcsonzes/Főoldal");
-    notificationHandler({ type: "success", message: "Sikeres bejelentkezés" });
-    */
   };
   return (
     <div>

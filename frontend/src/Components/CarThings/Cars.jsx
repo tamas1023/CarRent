@@ -3,14 +3,9 @@ import { Link } from "react-router-dom";
 import { AuthCont } from "../Services/AuthContext";
 
 const Cars = ({ searchText }) => {
-  //throw Promise.resolve("test");
-
   const [cars, setCars] = useState([]);
   const authC = useContext(AuthCont);
   async function getCars() {
-    const random = Math.floor(Math.random() * 5 + 1) * 1000;
-    //await new Promise((resolve) => setTimeout(resolve, random));
-
     await fetch(import.meta.env.VITE_API_URL + "/home/getCars", {
       method: "GET",
     })
@@ -23,7 +18,6 @@ const Cars = ({ searchText }) => {
       })
       .then((data) => {
         // Feldolgozni és menteni a kapott adatot a state-be
-
         setCars(data);
       })
       .catch((error) => {

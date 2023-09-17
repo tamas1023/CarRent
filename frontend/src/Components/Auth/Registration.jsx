@@ -12,14 +12,7 @@ const Registration = () => {
   const authC = useContext(AuthCont);
   const { notificationHandler } = useContext(NotificationCont);
 
-  //navigate("/autoKolcsonzes/Főoldal");
   const Reg = async () => {
-    /*
-    console.log(username.current.value);
-    console.log(email.current.value);
-    console.log(pass.current.value);
-    console.log(pass2.current.value);
-    */
     await fetch(import.meta.env.VITE_API_URL + "/auth/userReg", {
       method: "POST",
       body: JSON.stringify({
@@ -51,7 +44,6 @@ const Registration = () => {
             type: "success",
             message: data.msg,
           });
-          //authC.login(username.current.value);
           navigate("/autoKolcsonzes/Bejelentkezés");
         } else {
           notificationHandler({
@@ -62,7 +54,6 @@ const Registration = () => {
       })
       .catch((error) => {
         // Ha bármilyen hiba történt a kérés során
-        //console.error("Hiba történt:", error);
         notificationHandler({
           type: "error",
           message: "Hiba történt:" + error,

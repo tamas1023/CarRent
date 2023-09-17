@@ -49,16 +49,13 @@ function CarAdd(props) {
 
   const addNewCar = async () => {
     if (!authC.isAdmin()) return;
-    //const updatedCars = [...cars, { ...car, id: generateUniqueId() }];
-    //localStorage.setItem("cars", JSON.stringify(updatedCars));
+
     // ide egy beszúrás fell hogy következzen
     const updatedCar = {
       ...car,
       Image:
         "https://upload.wikimedia.org/wikipedia/commons/c/cf/Volkswagen_Beetle_.jpg",
     };
-
-    //console.log(updatedCar);
     await fetch(import.meta.env.VITE_API_URL + "/auth/carAdd", {
       method: "POST",
       body: JSON.stringify(updatedCar),
@@ -101,15 +98,12 @@ function CarAdd(props) {
       })
       .catch((error) => {
         // Ha bármilyen hiba történt a kérés során
-        //console.error("Hiba történt:", error);
         notificationHandler({
           type: "error",
           message: "Hiba történt:" + error,
         });
       });
-    //console.log(car);
     navitage("/autoKolcsonzes/Főoldal");
-    //notificationHandler({ type: "success", message: "Sikeres autó hozzáadás" });
   };
 
   const handleChange = (e) => {

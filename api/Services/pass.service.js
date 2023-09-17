@@ -1,7 +1,3 @@
-/*lengthCheck,
-  numberCheck,
-  lowerUpperCheck,*/
-
 const lengthCheck = (password) => {
   return password.length >= 8;
 };

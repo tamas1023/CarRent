@@ -9,28 +9,7 @@ function CarRent(props) {
   const authC = useContext(AuthCont);
   const { notificationHandler } = useContext(NotificationCont);
   const navitage = useNavigate();
-  /*
-  const cars = JSON.parse(localStorage.getItem("cars"));
-  //localStorage.removeItem("rents");
-  const rents = JSON.parse(localStorage.getItem("rents"));
-  const payments = JSON.parse(localStorage.getItem("payments"));
-  const onePayment = payments.filter(
-    (payment) => payment.username === authC.user
-  )[0];
 
-  const [rentedCars, setRentedCars] = useState(
-    rents === null
-      ? []
-      : cars.filter((car) =>
-          rents.some(
-            (rent) => rent.id === car.id && authC.user === rent.username
-          )
-        )
-  );
-  const [history, setHistory] = useState(
-    JSON.parse(localStorage.getItem("history")) || []
-  );
-  */
   const [userMoney, setUserMoney] = useState(0);
   //a rents táblából a kocsik, a kocsik adatait még le kell kérni
   const [rentedCars, setRentedCars] = useState([]);
@@ -89,19 +68,6 @@ function CarRent(props) {
   }, []);
 
   const toZero = async () => {
-    /*
-    if (onePayment.money < 0) {
-      onePayment.money = 0;
-
-      //miven a onepayment a filter által??? a payments re mutat ezért a payment értéke is válltozik... ?
-      localStorage.setItem("payments", JSON.stringify(payments));
-      navitage("/autoKolcsonzes/Bérlés");
-      notificationHandler({
-        type: "success",
-        message: "Sikeres kiegyenlítés",
-      });
-    }
-    */
     //pénz beállítása 0 ra
     await fetch(import.meta.env.VITE_API_URL + `/home/toZero`, {
       method: "POST",
@@ -139,9 +105,7 @@ function CarRent(props) {
             type: "success",
             message: data.msg,
           });
-
           setUserMoney(data.Money);
-          //navitage("/autoKolcsonzes/Bérlés");
         } else {
           notificationHandler({
             type: "error",
@@ -157,24 +121,6 @@ function CarRent(props) {
       });
   };
   const addMoney = async () => {
-    //const inputAmount = prompt("Add meg a mennyiséget: ");
-    /*
-    if (payAmountRef.current !== null && !isNaN(payAmountRef.current)) {
-      const amount = parseInt(payAmountRef.current);
-      onePayment.money += amount;
-      payments.map((payment) => {
-        payment.username === authC.user
-          ? { ...payment, money: payment.money + amount }
-          : payment;
-      });
-      localStorage.setItem("payments", JSON.stringify(payments));
-      navitage("/autoKolcsonzes/Bérlés");
-      notificationHandler({
-        type: "success",
-        message: "Sikeres pénz hozzáadás",
-      });
-    }
-    */
     //a meglévőhöz hozzá kell adni
     const amount = parseInt(payAmountRef.current);
     const newAmount = amount + userMoney;
@@ -215,9 +161,7 @@ function CarRent(props) {
             type: "success",
             message: data.msg,
           });
-
           setUserMoney(newAmount);
-          //navitage("/autoKolcsonzes/Bérlés");
         } else {
           notificationHandler({
             type: "error",
@@ -234,79 +178,6 @@ function CarRent(props) {
   };
 
   const stopRent = async (id) => {
-    /*
-    const oneRent = rents.filter((rent) => rent.id === id)[0];
-    const startDate = new Date(oneRent.date);
-    const currentDate = new Date();
-    const timeDifferenceMillis = currentDate.getTime() - startDate.getTime();
-    const hoursPassed = Math.ceil(timeDifferenceMillis / (1000 * 60 * 60));
-    const oneCar = cars.filter((car) => car.id === id)[0];
-    onePayment.money -= hoursPassed * oneCar.ára;
-
-    //csak hozzáadni a meglévő 1 autót a history ba
-    const generateUniqueId = () => {
-      const maxId = Math.max(...history.map((hist) => hist.id));
-
-      if (isNaN(maxId) || maxId === -Infinity) {
-        return 0;
-      }
-      return maxId + 1;
-    };
-    const kezdetiDátum = new Date(startDate);
-    const formattedDate1 = kezdetiDátum.toLocaleString("hu-HU", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-    const végeDátum = new Date(currentDate);
-    const formattedDate2 = kezdetiDátum.toLocaleString("hu-HU", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-
-    const updatedHistory = [
-      ...history,
-      {
-        id: generateUniqueId(),
-        felhasználóNév: oneRent.username,
-        autóNév: oneCar.név,
-        ára: oneCar.ára,
-        leírás: oneCar.leírás,
-        kép: oneCar.kép,
-        kezdetiDátum: formattedDate1,
-        végeDátum: formattedDate2,
-      },
-    ];
-    localStorage.setItem("history", JSON.stringify(updatedHistory));
-    setHistory(updatedHistory);
-    const updatedRents = rents.filter((rent) => rent.id !== id);
-    cars[id].kiBereltE = false;
-    const updateRentCars = cars.filter((car) =>
-      updatedRents.some(
-        (rent) => rent.id === car.id && authC.user === rent.username
-      )
-    );
-    setRentedCars(updateRentCars);
-    localStorage.setItem("cars", JSON.stringify(cars));
-    localStorage.setItem("rents", JSON.stringify(updatedRents));
-    //miven a onepayment a filter által??? a payments re mutat ezért a payment értéke is válltozik... ?
-    localStorage.setItem("payments", JSON.stringify(payments));
-    navitage("/autoKolcsonzes/Bérlés");
-    notificationHandler({
-      type: "success",
-      message: "Sikeres bérlés megszűntetés",
-    });
-    */
-    //pénzt levonni a dátum alapján
-    //kitörölni a rents táblából az elemet, a car.rented átállítani 0 ra,
-    //és a history hoz hozzáadni
-    //console.log(rentedCars);
-    //console.log(id);
     const selectStartDate = rentedCars.filter((car) => {
       return car.CarID === id;
     });
@@ -319,10 +190,8 @@ function CarRent(props) {
       return car.ID === id;
     });
     //Ez maradt a felhasználó pénzéből
-    //console.log(selectedRentCar[0].Value);
     let theCarPayment = userMoney;
     theCarPayment -= hoursPassed * selectedRentCar[0].Value;
-    //console.log(theCarPayment);
     const formattedDate1 = startDate.toLocaleString("hu-HU", {
       year: "numeric",
       month: "2-digit",
@@ -338,9 +207,6 @@ function CarRent(props) {
       hour: "2-digit",
       minute: "2-digit",
     });
-    //console.log(formattedDate1);
-    //console.log(formattedDate2);
-    //console.log(selectedRentCar[0].ID);
 
     await fetch(import.meta.env.VITE_API_URL + `/home/stopRent`, {
       method: "POST",

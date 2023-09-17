@@ -42,13 +42,6 @@ const Profil = () => {
           return;
         }
         if (data.success) {
-          /*
-          setUserMoney(data.Money);
-          setRentedCars(data.Rents);
-          setRentedCarsDetails(data.Cars);
-          */
-          //navitage("/autoKolcsonzes/Főoldal");
-          //console.log(data.userData);
           setUserData(data.userData);
         } else {
           notificationHandler({
@@ -86,11 +79,6 @@ const Profil = () => {
     setUserData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
   const Change = async () => {
-    /*
-    console.log(userData);
-    console.log(pass.current.value);
-    console.log(pass2.current.value);
-    */
     await fetch(import.meta.env.VITE_API_URL + "/home/userUpdate", {
       method: "POST",
 
@@ -133,13 +121,9 @@ const Profil = () => {
             type: "success",
             message: data.msg,
           });
-          //ide amit akarunk csinálni, ha minden jó lesz
-          //be "loginoltatni" a változásokat
-
-          //Új tokent kell generálni??
+          //Új tokent kell generálni?? Igen
           authC.login(data.user, authC.userRights);
           navigate("/autoKolcsonzes/Profil");
-          //navigate("/autoKolcsonzes/");
         } else {
           notificationHandler({
             type: "error",

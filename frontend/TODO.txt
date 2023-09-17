@@ -14,42 +14,18 @@ a pénz kiírását valahogy frissíteni, mert nem néz ki jól
 
 autók aktivitása, hogy aktívak e vagy sem,
 
-rendelések elmentése, hogy visszanézhető legyen (keresés megvalósítás, idő szerint is)
-a dátum kiírásra keresni valami jó megoldást
-
 figyelni arra hogy full reszponzív legyen
 
 
 Tervek backend el: (NextJs)
 
-singlecar started,(need cleanup)
-
-TODO:
-    //nálam gyakran lejár, de sztem egyenlőre így jó
-    //ha lejár akkor újat kell kérni
-    //ha kijelentkeznénk akkor ne lehessen ugyan azzal a tokennel belépni,
-    //ez lehet úgy is ahogy az Erik csinálta, vagy sztem 10 percre beállítom
-    //és ha kell újítani akkor megújjitom
-    //de mi a feltétele, hogy megújjítsam a tokent?
-    
-
-
-először működjön minden lekérdezés, utána lehet a védelemre ráállni pl: axios?? és jwt!
-
-
-
-
-TODO: autó hozzáadás statikus kép, profil és beállítások elkészítése (profilkép, jelszó váltás stb.)
-ha a név változik, akkor az változzon a history ban is a nevek
-ha a jelszó, vagy név, vagy email nem változik, akkor vagy nem küldjük el, vagy valahol le kell kezelni,
-hogy akkor azokat ne update elje
-
-
-
 
 a lekéréseket (Post, Get) áttehetném a context be, hogy egy helyen legyen az összes lekérdezés
 
+TODO: Egy Readme.dm készítése a Projektnek
+
 TODO:Admin page videó vagy elérhetővé tétele, az ÉLES WEBOLDALON!!
+TODO:Megolást keresni az image feltöltéssel, és annak moderálásával kapcsolatban
 
 HA MINDEN MEGVAN, akkor a kódot tisztítsuk le, pl többször használunk ugyan olyan. vagy hasonló dolgokat (pls fetch)
 azt szervezzük ki, tisztítsuk meg, a regisztrcásiót, pl vigyük át az authcontext be

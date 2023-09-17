@@ -2,25 +2,15 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const { urlencoded } = require("body-parser");
-//const sequelize = require("./Models/connection.modell");
 
 require("dotenv").config();
 app.use(cors());
 app.use(express.static("Public"));
 app.use(urlencoded({ extened: true }));
 app.use(express.json());
-//a header ba authtoken??
+//a header ba authtoken?? Igen ez kell hogy működjön
 app.use(cors({ exposedHeaders: "authtoken" }));
-/*
-async function test() {
-  try {
-    await sequelize.authenticate();
-    console.log("Connection has been established successfully.");
-  } catch (error) {
-    console.error("Unable to connect to the database:", error);
-  }
-}
-*/
+
 app.use("/auth", require("./Routes/auth.routes"));
 app.use("/home", require("./Routes/home.routes"));
 

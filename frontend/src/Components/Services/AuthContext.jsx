@@ -18,8 +18,7 @@ const AuthContext = (props) => {
   //TODO
   const authCheck = async () => {
     //itt nincs auth ellenőrzés de ha lenne ide jönne
-    //console.log("Cookie token");
-    //console.log(cookies.get("authtoken"));
+
     await fetch(import.meta.env.VITE_API_URL + `/auth/authCheck`, {
       method: "POST",
       headers: { authtoken: cookies.get("authtoken") || null },
@@ -30,19 +29,11 @@ const AuthContext = (props) => {
           return null;
         }
         //itt a res.json az a következőben a data?? ha jól tudom
-        //console.log("Header token");
-        //console.log(res.headers.get("authtoken"));
         cookies.set("authtoken", res.headers.get("authtoken"), { path: "/" });
         return res.json();
       })
       .then((data) => {
         if (data.success) {
-          /*
-          
-          setUser(res.data.user);
-          setIsAuth(true);
-          */
-
           login(data.user.UserName, data.user.RightsId);
           navigate("/autoKolcsonzes/Főoldal");
         } else {
@@ -53,31 +44,18 @@ const AuthContext = (props) => {
         //ha nem jön vissza semmi
         console.log(error);
         logout();
-        /*
-        notificationHandler({
-          type: "error",
-          message: "Hiba történt:" + error,
-        });
-        */
       });
   };
   const login = async (username, userrights) => {
     setIsLoggedIn(true);
     setUser(username);
     setUserRights(userrights);
-    /*
-    cookies.set("isLoggedIn", "true", { path: "/" });
-    cookies.set("userName", username, { path: "/" });
-    */
   };
   const logout = async () => {
     setIsLoggedIn(false);
     setUser(null);
     setUserRights(null);
-    /*
-    cookies.remove("userName", { path: "/" });
-    cookies.remove("isLoggedIn", { path: "/" });
-    */
+
     cookies.remove("authtoken", { path: "/" });
     navigate("/autoKolcsonzes/Főoldal");
   };
@@ -88,14 +66,6 @@ const AuthContext = (props) => {
     return false;
   };
   useEffect(() => {
-    /*
-    const storedLoggedInStatus = cookies.get("isLoggedIn");
-    const storeduserNameStatus = cookies.get("userName");
-    if (storedLoggedInStatus === "true" && storeduserNameStatus !== null) {
-      setIsLoggedIn(true);
-      setUser(storeduserNameStatus);
-    }*/
-    //
     if (window.matchMedia("(prefers-color-scheme: dark").matches) {
       setTheme("dark");
     } else {

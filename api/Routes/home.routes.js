@@ -2,7 +2,6 @@ const express = require("express");
 const Router = express.Router();
 
 const homeController = require("../Controllers/home.controller");
-//majd az auth check eknél kell
 const authMiddleware = require("../Middlewares/auth.middleware.js");
 
 Router.post("/userUpdate", authMiddleware.isAuth, homeController.userUpdate);

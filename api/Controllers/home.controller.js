@@ -295,7 +295,6 @@ exports.toZero = async (req, res) => {
 };
 exports.AddMoney = async (req, res) => {
   const { UserName, Money } = req.body;
-  //console.log(req.body);
   const t = await sequelize.transaction();
   try {
     const updatedUser = await Users.update(
@@ -339,7 +338,6 @@ exports.stopRent = async (req, res) => {
     Image,
     CarName,
   } = req.body;
-  //console.log(req.body.CarID);
   const t = await sequelize.transaction();
   try {
     const updatedUser = await Users.update(

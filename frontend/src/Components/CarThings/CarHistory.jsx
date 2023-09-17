@@ -9,8 +9,6 @@ const CarHistory = () => {
   const [history, setHistory] = useState([]);
   const authC = useContext(AuthCont);
   const { notificationHandler } = useContext(NotificationCont);
-  //JSON.parse(localStorage.getItem("history")) || []
-  //console.log(history);
   const formattedHistory = history.map((item) => {
     const formattedStartDate = new Date(item.StartDate).toLocaleString();
     const formattedEndDate = new Date(item.EndDate).toLocaleString();
@@ -23,7 +21,6 @@ const CarHistory = () => {
   });
 
   const reversedDates = [...formattedHistory].reverse();
-
   const [searchText, setSearchText] = useState("");
   // Szűrjük a bérelhető autókat, vagyis azokat, amelyek kiBereltE értéke false
 
@@ -67,19 +64,6 @@ const CarHistory = () => {
   const handleSearch = (e) => {
     setSearchText(e.target.value);
   };
-  //const updatedHistory = [...history, { ...hist, id: generateUniqueId() }];
-  //localStorage.setItem("history", JSON.stringify(updatedHistory));
-  /*
-    Autó név,
-    Autó kép,
-    Autó ára,
-    Esetleg leírás??,
-    kezdeti dátum,
-    végző dátum,
-    id   a törléshez,
-
-  
-  */
   return (
     <div>
       <div className="m-auto w-10/12">
