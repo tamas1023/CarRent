@@ -96,6 +96,7 @@ const Profil = () => {
 
       body: JSON.stringify({
         UserName: userData.UserName,
+        OldUserName: authC.user,
         Password: pass.current.value,
         Password2: pass2.current.value,
         Email: userData.Email,

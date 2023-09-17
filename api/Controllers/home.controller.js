@@ -16,7 +16,8 @@ const {
 exports.userUpdate = async (req, res) => {
   const t = await sequelize.transaction();
 
-  const { UserName, Password, Password2, Email, UserID } = req.body;
+  const { UserName, OldUserName, Password, Password2, Email, UserID } =
+    req.body;
   const updateData = {};
   if (!UserName || !Email) {
     await t.rollback();
@@ -32,27 +33,12 @@ exports.userUpdate = async (req, res) => {
 
   const emailCheck = await Users.findOne({ where: { Email: Email } });
   const userNameCheck = await Users.findOne({ where: { UserName: UserName } });
-  /*
-  console.log("----------------");
-  console.log(UserID);
-  console.log(userNameCheck.ID);
-  console.log(emailCheck.ID);
-  */
+
   if (userNameCheck) {
     if (userNameCheck.ID == UserID) {
       updateData.UserName = UserName;
     }
-    //console.log("Ugyan az a felhasználó");
-
     //ha a 2 id megeggyezik akkor az ugyan az a felhasználó
-
-    /*
-    await t.rollback();
-    return res.send({
-      success: false,
-      msg: "Ezzel a felhasználó névvel már regisztráltak!",
-    });
-    */
   } else {
     //ha nem talált eggyezést
     updateData.UserName = UserName;
@@ -61,14 +47,6 @@ exports.userUpdate = async (req, res) => {
     if (emailCheck.ID == UserID) {
       updateData.Email = Email;
     }
-
-    /*
-    await t.rollback();
-    return res.send({
-      success: false,
-      msg: "Ezzel az email címmel már regisztráltak!",
-    });
-    */
   } else {
     updateData.Email = Email;
   }
@@ -104,7 +82,6 @@ exports.userUpdate = async (req, res) => {
     const hashPassword = await bcrypt.hash(Password, 10);
     updateData.Password = hashPassword;
   }
-  //console.log(updateData);
 
   const updateUser = await Users.update(updateData, {
     where: {
@@ -118,25 +95,22 @@ exports.userUpdate = async (req, res) => {
     return res.send({ success: false, msg: "Adat módosítás hiba!" });
   }
 
-  /*
-  const insertUser = await Users.create(
+  //A nevet kell frissíteni a history ban
+  const updateHistory = await History.update(
+    { UserName: UserName },
     {
-      UserName: UserName,
-      Password: hashPassword,
-      Email: Email,
-      Money: 0,
-      RegDate: new Date(),
-      //1 az felhasználó, 2 az admin
-      RightsId: 1,
-    },
-    { transaction: t }
+      where: {
+        UserName: OldUserName,
+      },
+      transaction: t,
+    }
   );
-  
-  if (!insertUser) {
+
+  if (!updateHistory) {
     await t.rollback();
-    return res.send({ success: false, msg: "Regisztrációs hiba!" });
+    return res.send({ success: false, msg: "History adatmódosítás hiba!" });
   }
-  */
+
   //a jelenlegi auth tokent le kell tiltani
   const { authtoken } = req.headers;
   const results = await sequelize.query(
@@ -162,6 +136,7 @@ exports.userUpdate = async (req, res) => {
   if (!token) {
     return res.send({ success: false, msg: "Token hiba!" });
   }
+
   await t.commit();
   const updateDataLength = Object.keys(updateData).length;
   return res.set({ authtoken: token }).send({
@@ -197,7 +172,6 @@ exports.getCars = async (req, res) => {
   const cars = await Cars.findAll({
     //attributes: ["ID"],
   });
-  //console.log(cars);
   res.send(cars);
 };
 exports.getRents = async (req, res) => {
@@ -247,7 +221,6 @@ exports.getCar = async (req, res) => {
     });
 
     if (!car) {
-      //res.status(404).json({ error: "Autó nem található" });
       return res
         .status(404)
         .send({ success: false, msg: "Autó nem található" });
@@ -255,15 +228,11 @@ exports.getCar = async (req, res) => {
 
     res.send(car);
   } catch (error) {
-    //console.error("Hiba történt:", error);
-    //res.status(500).json({ error: "Szerverhiba" });
-
     return res.status(500).send({ success: false, msg: "Szerverhiba" });
   }
 };
 exports.rentCar = async (req, res) => {
-  const { CarID, UserName, CurDate } = req.body;
-  //console.log(req.body);
+  const { CarID, UserName } = req.body;
   const t = await sequelize.transaction();
   try {
     const insertRents = await Rents.create(
@@ -275,7 +244,7 @@ exports.rentCar = async (req, res) => {
       await t.rollback();
       return res.send({ success: false, msg: "Autóbérlés hiba!" });
     }
-
+    //A car.Rented firssítése
     const updateCars = await Cars.update(
       { Rented: 1 },
       { where: { ID: CarID } }
@@ -286,22 +255,15 @@ exports.rentCar = async (req, res) => {
       return res.send({ success: false, msg: "Autómódosítás hiba!" });
     }
 
-    //A car.Rented firssítése
-
     await t.commit();
     return res.send({ success: true, msg: "Sikeres autóbérlés!!" });
     //return res.send({ success: true, msg: "Tesztelek" });
   } catch (error) {
-    //console.error("Hiba történt:", error);
-    //res.status(500).json({ error: "Szerverhiba" });
-    //console.error("Hiba történt:", error);
-    //console.error("Hiba történt:", error.message);
     return res.status(500).send({ success: false, msg: error });
   }
 };
 exports.toZero = async (req, res) => {
   const { UserName } = req.body;
-  //console.log(req.body);
   const t = await sequelize.transaction();
   try {
     const updatedUser = await Users.update(
