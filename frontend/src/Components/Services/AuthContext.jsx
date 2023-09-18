@@ -65,6 +65,7 @@ const AuthContext = (props) => {
     }
     return false;
   };
+
   useEffect(() => {
     if (window.matchMedia("(prefers-color-scheme: dark").matches) {
       setTheme("dark");

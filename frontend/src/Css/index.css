@@ -42,6 +42,8 @@ textarea {
   border: 1px solid gray;
   border-radius: 6px;
   color: black;
+  padding: 10px 12px;
+  margin: 8px 0;
 }
 /*---------------------------------------------------------------------------------------
 Navbar
