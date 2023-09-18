@@ -235,6 +235,23 @@ exports.rentCar = async (req, res) => {
   const { CarID, UserName } = req.body;
   const t = await sequelize.transaction();
   try {
+    const oneUser = await Users.findOne({
+      where: {
+        UserName: UserName,
+      },
+      attributes: {
+        exclude: ["Password", "RegDate", "RightsId", "State"],
+      },
+    });
+    if (!oneUser) {
+      return res.send({ success: false, msg: "Nincs ilyen személy!" });
+    }
+    if (oneUser.Money < 0) {
+      return res.send({
+        success: false,
+        msg: "Nincs elég pénzed autó bérlésre!",
+      });
+    }
     const insertRents = await Rents.create(
       { CarID: CarID, UserName: UserName, Date: new Date() },
       { transaction: t }
