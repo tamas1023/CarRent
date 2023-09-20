@@ -27,6 +27,9 @@ TODO: Egy Readme.dm készítése a Projektnek
 TODO:Admin page videó vagy elérhetővé tétele, az ÉLES WEBOLDALON!!
 TODO:Megolást keresni az image feltöltéssel, és annak moderálásával kapcsolatban
 
+Esetleg rate limitelni az appot, védeni botok ellen,
+Írni egy leírást Githubra is
+
 HA MINDEN MEGVAN, akkor a kódot tisztítsuk le, pl többször használunk ugyan olyan. vagy hasonló dolgokat (pls fetch)
 azt szervezzük ki, tisztítsuk meg, a regisztrcásiót, pl vigyük át az authcontext be
 De Eriktől is kérdezzük meg, hogy mit mond rá
