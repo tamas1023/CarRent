@@ -7,6 +7,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { QueryTypes } = require("sequelize");
 const { dateToString } = require("../Services/date.service");
+
 const {
   lengthCheck,
   numberCheck,
@@ -29,6 +30,7 @@ exports.userLogin = async (req, res) => {
         Email: Email,
       },
     });
+
     if (!user) {
       return res.send({ success: false, msg: "Hibás email vagy jelszó!" });
     }

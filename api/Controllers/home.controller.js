@@ -8,6 +8,14 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { QueryTypes } = require("sequelize");
 const { dateToString } = require("../Services/date.service");
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log("Connection has been established successfully.");
+  })
+  .catch((err) => {
+    console.error("Unable to connect to the database:", err);
+  });
 const {
   lengthCheck,
   numberCheck,

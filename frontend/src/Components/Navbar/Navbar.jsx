@@ -151,7 +151,7 @@ const Navbar = (props) => {
                             <span className="sr-only">Open user menu</span>
                             <img
                               className="h-8 w-8 rounded-full"
-                              src="./img/default-profile-picture.png"
+                              src="/img/default-profile-picture.png"
                               alt=""
                             />
                           </Menu.Button>
