@@ -29,22 +29,23 @@
 
 This webpage is running in 'Render Service' mode, so the webpage will load slowly, so wait around half to one minute. [To the webpage](https://carrent-frontend.onrender.com)
 
-The image changing in the profile, and in cars, is temporarly **disabled**, until I find a safe and reliable way to check the uploaded images.
+The image changing in the profile and in cars is temporarily **disabled**, until I find a safe and reliable way to check the uploaded images.
 
 ## Key Features
 
 - Users
 
-  - Can rent cars that are shown in the Main page
-  - Search for a specific cars of your liking
+  - Can rent cars that are shown on the main page
+  - Search for specific cars to your liking
   - Inspect the cars for more information
   - Theme toggle (dark or light)
   - Can stop renting whenever the users want.
   - Adding money to the balance
   - Profile changes (name, e-mail, and password)
 
-- Admins (users fetaures<sup>+</sup> )
-  - Modifly the car datas (name, price/hour description)
+- Admins (users fetaures<sup>+</sup> )
+
+  - Modify the car data (name, price per hour, and description)
   - Delete cars
-  - Add new car
-  - History, where the admin can search for a car, or a user, and the dates
+  - Add a new car
+  - History, where the admin can search for a car or a user, and the dates
