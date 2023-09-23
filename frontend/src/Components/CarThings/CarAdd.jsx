@@ -103,7 +103,7 @@ function CarAdd(props) {
           message: "Hiba történt:" + error,
         });
       });
-    authC.setNavId(id);
+    authC.setNavId(0);
     navitage("/autoKolcsonzes/Főoldal");
   };
 
