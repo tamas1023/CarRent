@@ -12,7 +12,7 @@ const Cars = ({ searchText }) => {
       .then((response) => {
         // Ellenőrizd a választ, hogy biztosítsd, hogy a kérés sikeres volt
         if (!response.ok) {
-          throw new Error("A kérés sikertelen volt");
+          throw new Error("Error");
         }
         return response.json(); // Válasz JSON formátumban
       })
@@ -22,7 +22,7 @@ const Cars = ({ searchText }) => {
       })
       .catch((error) => {
         // Kezelni a hibát itt, például naplózás vagy felhasználó értesítése
-        console.error("Hiba történt:", error);
+        console.error("Error: ", error);
       });
   }
 
@@ -61,7 +61,7 @@ const Cars = ({ searchText }) => {
               {car.Description}
             </p>
             <p className="text-slate-700 dark:text-slate-300  mt-2">
-              Ár: {car.Value}/óra
+              Price: {car.Value}/hour(HUF)
             </p>
           </div>
         </Link>

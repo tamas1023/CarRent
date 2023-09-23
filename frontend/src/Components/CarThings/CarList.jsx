@@ -26,7 +26,7 @@ function CarList(props) {
             name="search"
             value={searchText}
             onChange={handleSearch}
-            placeholder="Keresés..."
+            placeholder="Search..."
           />
           <button type="submit" className="absolute right-0 top-0 mt-5 mr-4">
             <svg

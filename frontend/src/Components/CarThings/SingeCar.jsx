@@ -38,7 +38,7 @@ function SingleCar(props) {
       })
 
       .catch((error) => {
-        console.error("Hiba történt:", error);
+        console.error("Error: ", error);
       });
 
     return storedCar;
@@ -60,30 +60,30 @@ function SingleCar(props) {
   }, [id]);
   const inputs = [
     {
-      név: "Név",
+      név: "Car name",
       name: "Name",
-      placeholder: "Az autó neve",
+      placeholder: "Car name",
       type: "text",
       defaultValue: car.Name,
     },
     {
-      név: "Ára /óra(csak szám)",
+      név: "Price /hour(only number, and currency HUF)",
       name: "Value",
-      placeholder: "Az autó ára forintban értve",
+      placeholder: "The price of the car is in HUF",
       type: "number",
       defaultValue: car.Value,
     },
     {
-      név: "Leírás",
+      név: "Description",
       name: "Description",
-      placeholder: "Az autó leírása",
+      placeholder: "Car description",
       type: "text",
       defaultValue: car.Description,
     },
     {
-      név: "Kép (URL)",
+      név: "Image (URL)",
       name: "Image",
-      placeholder: "Az autó képe",
+      placeholder: "Car image",
       type: "text",
       defaultValue: car.Image,
     },
@@ -100,7 +100,7 @@ function SingleCar(props) {
         if (!res.ok) {
           notificationHandler({
             type: "error",
-            message: "HTTP Hiba!",
+            message: "HTTP error!",
           });
           return null;
         }
@@ -111,7 +111,7 @@ function SingleCar(props) {
         if (data.logout) {
           notificationHandler({
             type: "warning",
-            message: "Jelentkezz be újra!",
+            message: "Please login again!",
           });
           authC.logout();
           return;
@@ -132,7 +132,7 @@ function SingleCar(props) {
       .catch((error) => {
         notificationHandler({
           type: "error",
-          message: "Hiba történt:" + error,
+          message: "Error: " + error,
         });
       });
   };
@@ -160,7 +160,7 @@ function SingleCar(props) {
         if (!res.ok) {
           notificationHandler({
             type: "error",
-            message: "HTTP Hiba!",
+            message: "HTTP error!",
           });
           return null;
         }
@@ -171,7 +171,7 @@ function SingleCar(props) {
         if (data.logout) {
           notificationHandler({
             type: "warning",
-            message: "Jelentkezz be újra!",
+            message: "Please login again!",
           });
           authC.logout();
           return;
@@ -192,7 +192,7 @@ function SingleCar(props) {
       .catch((error) => {
         notificationHandler({
           type: "error",
-          message: "Hiba történt:" + error,
+          message: "Error: " + error,
         });
       });
   };
@@ -220,7 +220,7 @@ function SingleCar(props) {
         if (!res.ok) {
           notificationHandler({
             type: "error",
-            message: "HTTP Hiba!",
+            message: "HTTP error!",
           });
           return null;
         }
@@ -231,7 +231,7 @@ function SingleCar(props) {
         if (data.logout) {
           notificationHandler({
             type: "warning",
-            message: "Jelentkezz be újra!",
+            message: "Please login again!",
           });
           authC.logout();
           return;
@@ -252,7 +252,7 @@ function SingleCar(props) {
       .catch((error) => {
         notificationHandler({
           type: "error",
-          message: "Hiba történt:" + error,
+          message: "Error: " + error,
         });
       });
   };
@@ -260,11 +260,11 @@ function SingleCar(props) {
     let message;
 
     if (content === "rent") {
-      message = "Biztosan ki akarod bérelni?";
+      message = "Are you sure you want to rent it out?";
     } else if (content === "delete") {
-      message = "Biztosan törölni akarod az autót?";
+      message = "Are you sure you want to delete the car?";
     } else if (content === "change") {
-      message = "Biztos végre akarod hajtani a módosításokat?";
+      message = "Are you sure you want to apply the changes?";
     }
 
     return (
@@ -276,13 +276,13 @@ function SingleCar(props) {
               className="px-4 py-2 mr-2 bg-red-500 text-white rounded-md transition-colors duration-300 ease-in-out hover:bg-red-700"
               onClick={onCancel}
             >
-              Mégsem
+              Canel
             </button>
             <button
               className="px-4 py-2 bg-blue-500 text-white rounded-md transition-colors duration-300 ease-in-out hover:bg-blue-700"
               onClick={onConfirm}
             >
-              Igen
+              Yes
             </button>
           </div>
         </div>
@@ -342,7 +342,7 @@ function SingleCar(props) {
                     setShowConfirmModal(true);
                   }}
                 >
-                  Autó bérlése
+                  Car rent
                 </button>
               ) : (
                 ""
@@ -357,7 +357,7 @@ function SingleCar(props) {
                       setShowConfirmModal(true);
                     }}
                   >
-                    Autó módosítása
+                    Car modification
                   </button>
                   <button
                     onClick={() => {
@@ -367,7 +367,7 @@ function SingleCar(props) {
                     }}
                     className="block w-full bg-red-500 hover:bg-red-600 active:bg-red-700 focus:outline-none focus:ring focus:ring-red-300 rounded-md p-2 text-white"
                   >
-                    Autó törlése
+                    Delete car
                   </button>
                 </div>
               ) : (
@@ -383,7 +383,7 @@ function SingleCar(props) {
                 onClick={handleCloseModal}
                 className="absolute top-2 right-2 p-2 text-white bg-gray-700 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-gray-800"
               >
-                Bezárás
+                Close
               </button>
               <img
                 src={car.Image}

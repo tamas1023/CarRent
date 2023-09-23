@@ -31,7 +31,7 @@ const CarHistory = () => {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("A kérés sikertelen volt");
+          throw new Error("Error");
         }
         return response.json();
       })
@@ -40,7 +40,7 @@ const CarHistory = () => {
         if (data.logout) {
           notificationHandler({
             type: "warning",
-            message: "Jelentkezz be újra!",
+            message: "Please login again!",
           });
           authC.logout();
           return;
@@ -48,7 +48,7 @@ const CarHistory = () => {
         setHistory(data);
       })
       .catch((error) => {
-        console.error("Hiba történt:", error);
+        console.error("Error: ", error);
       });
   }
 
@@ -74,7 +74,7 @@ const CarHistory = () => {
             name="search"
             value={searchText}
             onChange={handleSearch}
-            placeholder="Keresés..."
+            placeholder="Search..."
           />
           <button type="submit" className="absolute right-0 top-0 mt-5 mr-4">
             <svg
@@ -120,9 +120,9 @@ const CarHistory = () => {
             <div className="flex-grow">
               <h2 className="text-xl font-semibold mb-2">{car.CarName}</h2>
               <p className="">{car.Description}</p>
-              <p className=" mt-2">Ár: {car.Value}/óra</p>
-              <p className="">Kezdeti dátum: {car.StartDate}</p>
-              <p className=" mt-2">Vége dátum: {car.EndDate}</p>
+              <p className=" mt-2">Price: {car.Value}/hour(HUF)</p>
+              <p className="">Start date: {car.StartDate}</p>
+              <p className=" mt-2">End date: {car.EndDate}</p>
             </div>
           </div>
         ))}

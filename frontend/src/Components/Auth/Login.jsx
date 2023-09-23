@@ -31,7 +31,7 @@ const Login = (props) => {
         if (!res.ok) {
           notificationHandler({
             type: "error",
-            message: "HTTP Hiba!",
+            message: "HTTP error!",
           });
           return null;
         }
@@ -56,10 +56,10 @@ const Login = (props) => {
 
       .catch((error) => {
         // Ha bármilyen hiba történt a kérés során
-        console.error("Hiba történt:", error);
+        //console.error("Hiba történt:", error);
         notificationHandler({
           type: "error",
-          message: "Hiba történt:Login  " + error,
+          message: "Error:  " + error,
         });
       });
   };
@@ -82,7 +82,7 @@ const Login = (props) => {
                 />
               </div>
               <label className="block text-sm font-medium leading-6 ">
-                Jelszó
+                Password
               </label>
               <div className="mt-2">
                 <input
@@ -90,7 +90,7 @@ const Login = (props) => {
                   name="password"
                   ref={pass}
                   className="block w-full rounded-md border-0 py-1.5  shadow-sm ring-1 ring-inset ring-gray-300 text-black focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  placeholder="Jelszó"
+                  placeholder="Password"
                 />
               </div>
             </div>
@@ -101,7 +101,7 @@ const Login = (props) => {
                 CheckUser();
               }}
             >
-              Bejelentkezés
+              Login
             </button>
             <button
               className="bg-green-500 hover:bg-green-600 active:bg-green-700 focus:outline-none focus:ring focus:ring-green-300 rounded-md p-2 text-white"
@@ -109,7 +109,7 @@ const Login = (props) => {
                 ToRegistration();
               }}
             >
-              Regisztráció
+              Registration
             </button>
           </div>
         </div>

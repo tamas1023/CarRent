@@ -34,7 +34,7 @@ const MainContent = () => {
           <Route
             path="/autoKolcsonzes/Főoldal/*"
             element={
-              <LoggedPageHolder title={"Főoldal"}>
+              <LoggedPageHolder title={"Home Page"}>
                 <Home />
               </LoggedPageHolder>
             }
@@ -43,7 +43,7 @@ const MainContent = () => {
             path="/autoKolcsonzes/Bérlés/*"
             element={
               <AuthProtection>
-                <LoggedPageHolder title={"Bérlés"}>
+                <LoggedPageHolder title={"Rent"}>
                   <CarRent />
                 </LoggedPageHolder>
               </AuthProtection>
@@ -53,7 +53,7 @@ const MainContent = () => {
             path="/autoKolcsonzes/Profil/*"
             element={
               <AuthProtection>
-                <LoggedPageHolder title={"Profil"}>
+                <LoggedPageHolder title={"Profile"}>
                   <Profil />
                 </LoggedPageHolder>
               </AuthProtection>
@@ -64,7 +64,7 @@ const MainContent = () => {
             path="/autoKolcsonzes/Auto/:autoId"
             element={
               <>
-                <LoggedPageHolder title={"Egy Autó"}>
+                <LoggedPageHolder title={"Single Car"}>
                   <SingleCar />
                 </LoggedPageHolder>
               </>
@@ -74,7 +74,7 @@ const MainContent = () => {
             path="/autoKolcsonzes/Hozzáadás"
             element={
               <AdminProtection>
-                <LoggedPageHolder title={"Autó Hozzáadás"}>
+                <LoggedPageHolder title={"Car add"}>
                   <CarAdd />
                 </LoggedPageHolder>
               </AdminProtection>
@@ -104,7 +104,7 @@ const MainContent = () => {
             path="/autoKolcsonzes/Regisztráció"
             element={
               <OutProtection>
-                <LoggedPageHolder title={"Regisztráció"}>
+                <LoggedPageHolder title={"Registration"}>
                   <Registration />
                 </LoggedPageHolder>
               </OutProtection>

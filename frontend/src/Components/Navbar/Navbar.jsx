@@ -39,7 +39,7 @@ const Navbar = (props) => {
     // Dinamikus navigation létrehozása az admin jogok alapján
     const dynamicNavigation = [
       {
-        name: "Főoldal",
+        name: "Home",
         href: "/autoKolcsonzes/Főoldal",
         current: authC.navId === 0 ? true : false,
         id: 0,
@@ -47,7 +47,7 @@ const Navbar = (props) => {
     ];
     if (authC.isLoggedIn) {
       dynamicNavigation.push({
-        name: "Bérlés",
+        name: "Rent",
         href: "/autoKolcsonzes/Bérlés",
         current: authC.navId === 1 ? true : false,
         id: 1,
@@ -57,13 +57,13 @@ const Navbar = (props) => {
     if (authC.isAdmin()) {
       dynamicNavigation.push(
         {
-          name: "Autó Hozzáadás",
+          name: "Car add",
           href: "/autoKolcsonzes/Hozzáadás",
           current: authC.navId === 2 ? true : false,
           id: 2,
         },
         {
-          name: "Előzmények",
+          name: "History",
           href: "/autoKolcsonzes/History",
           current: authC.navId === 3 ? true : false,
           id: 3,
@@ -83,7 +83,7 @@ const Navbar = (props) => {
   };
   const Logout = () => {
     authC.logout();
-    notificationHandler({ type: "success", message: "Sikeres kijelentkezés" });
+    notificationHandler({ type: "success", message: "Successful logout" });
   };
 
   return (
@@ -178,7 +178,7 @@ const Navbar = (props) => {
                                     currentChanges(-1);
                                   }}
                                 >
-                                  Profil
+                                  Profile
                                 </Link>
                               )}
                             </Menu.Item>
@@ -191,7 +191,7 @@ const Navbar = (props) => {
                                   )}
                                   onClick={Logout}
                                 >
-                                  Kijelentkezés
+                                  Logout
                                 </Link>
                               )}
                             </Menu.Item>
@@ -210,7 +210,7 @@ const Navbar = (props) => {
                             currentChanges(-1);
                           }}
                         >
-                          Bejelentkezés
+                          Login
                         </Link>
                       </div>
                     )

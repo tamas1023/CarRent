@@ -31,7 +31,7 @@ exports.userUpdate = async (req, res) => {
     await t.rollback();
     return res.send({
       success: false,
-      msg: "Hiányzó felhasználónév vagy email!",
+      msg: "Missing username or email!",
     });
   }
   //ha nem vátozott a jelszó akkor ne csináljon semmit a jelszóval,
@@ -64,27 +64,27 @@ exports.userUpdate = async (req, res) => {
       await t.rollback();
       return res.send({
         success: false,
-        msg: "A megadott jelszavak nem egyeznek!",
+        msg: "The entered passwords do not match!",
       });
     }
     if (!lengthCheck(Password)) {
       await t.rollback();
       return res.send({
         success: false,
-        msg: "A megadott jelszónak min. 8 karakternek kell lennie!",
+        msg: "The entered password must be at least 8 characters long!",
       });
     }
     if (!numberCheck(Password)) {
       await t.rollback();
       return res.send({
         success: false,
-        msg: "A megadott jelszónak tartalmaznia kell számot!",
+        msg: "The entered password must contain a number!",
       });
     }
     if (!lowerUpperCheck(Password)) {
       return res.send({
         success: false,
-        msg: "A megadott jelszónak tartalmaznia kell kis- és nagybetűket is!",
+        msg: "The entered password must contain both upper and lower case letters!",
       });
     }
     const hashPassword = await bcrypt.hash(Password, 10);
@@ -100,7 +100,7 @@ exports.userUpdate = async (req, res) => {
 
   if (!updateUser) {
     await t.rollback();
-    return res.send({ success: false, msg: "Adat módosítás hiba!" });
+    return res.send({ success: false, msg: "Data modification error!" });
   }
 
   //A nevet kell frissíteni a history ban
@@ -116,7 +116,10 @@ exports.userUpdate = async (req, res) => {
 
   if (!updateHistory) {
     await t.rollback();
-    return res.send({ success: false, msg: "History adatmódosítás hiba!" });
+    return res.send({
+      success: false,
+      msg: "History data modification error!",
+    });
   }
 
   //a jelenlegi auth tokent le kell tiltani
@@ -131,7 +134,7 @@ exports.userUpdate = async (req, res) => {
 
   if (!results) {
     await t.rollback();
-    return res.send({ success: false, msg: "Token tiltási hiba!" });
+    return res.send({ success: false, msg: "Token ban error!" });
   }
   //Új tokent kell generálni!!
   const token = await jwt.sign(
@@ -142,14 +145,14 @@ exports.userUpdate = async (req, res) => {
     }
   );
   if (!token) {
-    return res.send({ success: false, msg: "Token hiba!" });
+    return res.send({ success: false, msg: "Token error!" });
   }
 
   await t.commit();
   const updateDataLength = Object.keys(updateData).length;
   return res.set({ authtoken: token }).send({
     success: true,
-    msg: `Sikeres adat módosítás! ${updateDataLength}db`,
+    msg: `Successful data modification!`,
     user: UserName,
   });
   //return res.send({ success: true, msg: "Tesztelek" });
@@ -167,12 +170,12 @@ exports.getProfil = async (req, res) => {
   });
 
   if (!oneUser) {
-    return res.send({ success: false, msg: "Nincs ilyen személy!" });
+    return res.send({ success: false, msg: "There is no such person!" });
   }
 
   return res.send({
     success: true,
-    msg: "Sikeres lekérések",
+    msg: "Successful requests",
     userData: oneUser,
   });
 };
@@ -192,7 +195,7 @@ exports.getRents = async (req, res) => {
   });
 
   if (!rents) {
-    return res.send({ success: false, msg: "Nincs bérelt autó!" });
+    return res.send({ success: false, msg: "No rented car!" });
   }
   // keresni olyan autókat, ami a rents.CarID val megeggyeznek
   //ha van 3 carID akkor neki 3 cars elemet kell visszaadni
@@ -213,7 +216,7 @@ exports.getRents = async (req, res) => {
 
   return res.send({
     success: true,
-    msg: "Sikeres lekérések",
+    msg: "Successful requests",
     Money: money.Money,
     Rents: rents,
     Cars: cars,
@@ -229,14 +232,12 @@ exports.getCar = async (req, res) => {
     });
 
     if (!car) {
-      return res
-        .status(404)
-        .send({ success: false, msg: "Autó nem található" });
+      return res.status(404).send({ success: false, msg: "No car found" });
     }
 
     res.send(car);
   } catch (error) {
-    return res.status(500).send({ success: false, msg: "Szerverhiba" });
+    return res.status(500).send({ success: false, msg: "Server error" });
   }
 };
 exports.rentCar = async (req, res) => {
@@ -252,12 +253,12 @@ exports.rentCar = async (req, res) => {
       },
     });
     if (!oneUser) {
-      return res.send({ success: false, msg: "Nincs ilyen személy!" });
+      return res.send({ success: false, msg: "There is no such person!" });
     }
     if (oneUser.Money < 0) {
       return res.send({
         success: false,
-        msg: "Nincs elég pénzed autó bérlésre!",
+        msg: "You don't have enough money to rent a car!",
       });
     }
     const insertRents = await Rents.create(
@@ -267,7 +268,7 @@ exports.rentCar = async (req, res) => {
 
     if (!insertRents) {
       await t.rollback();
-      return res.send({ success: false, msg: "Autóbérlés hiba!" });
+      return res.send({ success: false, msg: "Car rental error!" });
     }
     //A car.Rented firssítése
     const updateCars = await Cars.update(
@@ -277,11 +278,11 @@ exports.rentCar = async (req, res) => {
 
     if (!updateCars) {
       await t.rollback();
-      return res.send({ success: false, msg: "Autómódosítás hiba!" });
+      return res.send({ success: false, msg: "Car modification error!" });
     }
 
     await t.commit();
-    return res.send({ success: true, msg: "Sikeres autóbérlés!!" });
+    return res.send({ success: true, msg: "Successful car rental!" });
     //return res.send({ success: true, msg: "Tesztelek" });
   } catch (error) {
     return res.status(500).send({ success: false, msg: error });
@@ -304,13 +305,13 @@ exports.toZero = async (req, res) => {
       await t.rollback();
       return res.send({
         success: false,
-        msg: "Pénz frissítés hiba!",
+        msg: "Money update error!",
       });
     }
     await t.commit();
     return res.send({
       success: true,
-      msg: "Sikeres pénz frissítés!",
+      msg: "Successful money update!",
       Money: 0,
     });
     //return res.send({ success: true, msg: "Tesztelek" });
@@ -335,13 +336,13 @@ exports.AddMoney = async (req, res) => {
       await t.rollback();
       return res.send({
         success: false,
-        msg: "Pénz frissítés hiba!",
+        msg: "Money update error!",
       });
     }
     await t.commit();
     return res.send({
       success: true,
-      msg: "Sikeres pénz frissítés!",
+      msg: "Successful money update!",
     });
   } catch (error) {
     return res.status(500).send({ success: false, msg: error });
@@ -378,7 +379,7 @@ exports.stopRent = async (req, res) => {
       await t.rollback();
       return res.send({
         success: false,
-        msg: "Pénz frissítés hiba!",
+        msg: "Money update error!",
       });
     }
     const deletedRent = await Rents.destroy({
@@ -390,7 +391,7 @@ exports.stopRent = async (req, res) => {
       await t.rollback();
       return res.send({
         success: false,
-        msg: "Rent törlés hiba!",
+        msg: "Rent deletion error!",
       });
     }
     const updatedCars = await Cars.update(
@@ -405,7 +406,7 @@ exports.stopRent = async (req, res) => {
       await t.rollback();
       return res.send({
         success: false,
-        msg: "Autó módosítani hiba!",
+        msg: "Car modify error!",
       });
     }
 
@@ -426,13 +427,13 @@ exports.stopRent = async (req, res) => {
       await t.rollback();
       return res.send({
         success: false,
-        msg: "History beszúrás hiba!",
+        msg: "History insertion error!",
       });
     }
     await t.commit();
     return res.send({
       success: true,
-      msg: "Sikeres bérlés megszűntetés!",
+      msg: "Successfuly stoped renting!",
     });
   } catch (error) {
     return res.status(500).send({ success: false, msg: error });

@@ -30,7 +30,7 @@ function CarRent(props) {
         if (!response.ok) {
           notificationHandler({
             type: "error",
-            message: "HTTP Hiba!",
+            message: "HTTP error!",
           });
           return null;
         }
@@ -40,7 +40,7 @@ function CarRent(props) {
         if (data.logout) {
           notificationHandler({
             type: "warning",
-            message: "Jelentkezz be újra!",
+            message: "Please login again!",
           });
           authC.logout();
           return;
@@ -59,7 +59,7 @@ function CarRent(props) {
       })
       .catch((error) => {
         // Kezelni a hibát itt, például naplózás vagy felhasználó értesítése
-        console.error("Hiba történt:", error);
+        console.error("Error: ", error);
       });
   }
 
@@ -84,7 +84,7 @@ function CarRent(props) {
         if (!res.ok) {
           notificationHandler({
             type: "error",
-            message: "HTTP Hiba!",
+            message: "HTTP error!",
           });
           return null;
         }
@@ -95,7 +95,7 @@ function CarRent(props) {
         if (data.logout) {
           notificationHandler({
             type: "warning",
-            message: "Jelentkezz be újra!",
+            message: "Please login again!",
           });
           authC.logout();
           return;
@@ -116,7 +116,7 @@ function CarRent(props) {
       .catch((error) => {
         notificationHandler({
           type: "error",
-          message: "Hiba történt:" + error,
+          message: "Error: " + error,
         });
       });
   };
@@ -140,7 +140,7 @@ function CarRent(props) {
         if (!res.ok) {
           notificationHandler({
             type: "error",
-            message: "HTTP Hiba!",
+            message: "HTTP error!",
           });
           return null;
         }
@@ -151,7 +151,7 @@ function CarRent(props) {
         if (data.logout) {
           notificationHandler({
             type: "warning",
-            message: "Jelentkezz be újra!",
+            message: "Please login again!",
           });
           authC.logout();
           return;
@@ -172,7 +172,7 @@ function CarRent(props) {
       .catch((error) => {
         notificationHandler({
           type: "error",
-          message: "Hiba történt:" + error,
+          message: "Error: " + error,
         });
       });
   };
@@ -231,7 +231,7 @@ function CarRent(props) {
         if (!res.ok) {
           notificationHandler({
             type: "error",
-            message: "HTTP Hiba!",
+            message: "HTTP error!",
           });
           return null;
         }
@@ -242,7 +242,7 @@ function CarRent(props) {
         if (data.logout) {
           notificationHandler({
             type: "warning",
-            message: "Jelentkezz be újra!",
+            message: "Please login again!",
           });
           authC.logout();
           return;
@@ -264,7 +264,7 @@ function CarRent(props) {
       .catch((error) => {
         notificationHandler({
           type: "error",
-          message: "Hiba történt:" + error,
+          message: "Error: " + error,
         });
       });
   };
@@ -274,18 +274,18 @@ function CarRent(props) {
 
   const Modal = ({ onCancel, onConfirm }) => {
     const modalText =
-      modalContent === "kiegyenlites"
-        ? "Biztosan ki akarod egyenlíteni a számlát?"
-        : modalContent === "feltoltes"
-        ? "Add meg a mennyiséget:"
-        : "Biztosan meg akarod szüntetni a bérlést?";
+      modalContent === "equalization"
+        ? "Are you sure you want to set the money to 0?"
+        : modalContent === "top-up"
+        ? "Enter the quantity:"
+        : "Are you sure you want to cancel the rental?";
 
     return (
       <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-50">
         <div className="bg-white p-4 rounded-md text-black">
           <p>{modalText}</p>
-          {modalContent === "kiegyenlites" || modalContent === "feltoltes" ? (
-            modalContent === "feltoltes" ? (
+          {modalContent === "equalization" || modalContent === "top-up" ? (
+            modalContent === "top-up" ? (
               <div className="">
                 <input
                   type="number"
@@ -300,13 +300,13 @@ function CarRent(props) {
                     className="px-4 py-2 mr-2 bg-red-500 text-white rounded-md transition-colors duration-300 ease-in-out hover:bg-red-700"
                     onClick={onCancel}
                   >
-                    Mégsem
+                    Cancel
                   </button>
                   <button
                     className="px-4 py-2 bg-blue-500 text-white rounded-md transition-colors duration-300 ease-in-out hover:bg-blue-700"
                     onClick={onConfirm}
                   >
-                    {modalContent === "kiegyenlites" ? "Igen" : "Feltöltés"}
+                    {modalContent === "equalization" ? "Yes" : "Top-up"}
                   </button>
                 </div>
               </div>
@@ -316,13 +316,13 @@ function CarRent(props) {
                   className="px-4 py-2 mr-2 bg-red-500 text-white rounded-md transition-colors duration-300 ease-in-out hover:bg-red-700"
                   onClick={onCancel}
                 >
-                  Mégsem
+                  Cancel
                 </button>
                 <button
                   className="px-4 py-2 bg-blue-500 text-white rounded-md transition-colors duration-300 ease-in-out hover:bg-blue-700"
                   onClick={onConfirm}
                 >
-                  {modalContent === "kiegyenlites" ? "Igen" : "Feltöltés"}
+                  {modalContent === "equalization" ? "Yes" : "Top-up"}
                 </button>
               </div>
             )
@@ -332,13 +332,13 @@ function CarRent(props) {
                 className="px-4 py-2 mr-2 bg-red-500 text-white rounded-md transition-colors duration-300 ease-in-out hover:bg-red-700"
                 onClick={onCancel}
               >
-                Mégsem
+                Cancel
               </button>
               <button
                 className="px-4 py-2 bg-blue-500 text-white rounded-md transition-colors duration-300 ease-in-out hover:bg-blue-700"
                 onClick={onConfirm}
               >
-                Igen
+                Yes
               </button>
             </div>
           )}
@@ -349,24 +349,24 @@ function CarRent(props) {
 
   return (
     <div>
-      <h1 className="ml-2">{userMoney} pénzed van</h1>
+      <h1 className="ml-2">{userMoney} money you have</h1>
       <button
         className=" mb-2 ml-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 rounded-md p-2 text-white"
         onClick={() => {
-          setModalContent("feltoltes");
+          setModalContent("top-up");
           setShowModal(true);
         }}
       >
-        Egyenleg feltöltés
+        Balance top up
       </button>
       <button
         className=" mb-2 ml-2 bg-blue-500  hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 rounded-md p-2 text-white"
         onClick={() => {
-          setModalContent("kiegyenlites");
+          setModalContent("equalization");
           setShowModal(true);
         }}
       >
-        Egyenleg kiegyenlítése
+        Balance equalization
       </button>
       <div
         className="grid "
@@ -389,7 +389,7 @@ function CarRent(props) {
             <div className="flex-grow">
               <h2 className="text-xl font-semibold mb-2">{car.Name}</h2>
               <p className="">{car.Description}</p>
-              <p className=" mt-2">Ár: {car.Value}/óra</p>
+              <p className=" mt-2">Price: {car.Value}/hour(HUF)</p>
             </div>
             <button
               className="block w-full mb-2 text-white bg-blue-500 hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 rounded-md p-2 "
@@ -399,7 +399,7 @@ function CarRent(props) {
                 setShowModal(true);
               }}
             >
-              Autó bérlés megszűntetése
+              Stop renting
             </button>
           </div>
         ))}
@@ -409,9 +409,9 @@ function CarRent(props) {
           onCancel={() => setShowModal(false)}
           onConfirm={() => {
             setShowModal(false);
-            if (modalContent === "kiegyenlites") {
+            if (modalContent === "equalization") {
               toZero();
-            } else if (modalContent === "feltoltes") {
+            } else if (modalContent === "top-up") {
               addMoney();
             } else {
               stopRent(wantToStopRent);

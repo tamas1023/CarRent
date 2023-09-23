@@ -26,7 +26,7 @@ const Profil = () => {
         if (!response.ok) {
           notificationHandler({
             type: "error",
-            message: "HTTP Hiba!",
+            message: "HTTP error!",
           });
           return null;
         }
@@ -36,7 +36,7 @@ const Profil = () => {
         if (data.logout) {
           notificationHandler({
             type: "warning",
-            message: "Jelentkezz be újra!",
+            message: "Please login again!",
           });
           authC.logout();
           return;
@@ -52,7 +52,7 @@ const Profil = () => {
       })
       .catch((error) => {
         // Kezelni a hibát itt, például naplózás vagy felhasználó értesítése
-        console.error("Hiba történt:", error);
+        console.error("Error:", error);
       });
   }
 
@@ -61,9 +61,9 @@ const Profil = () => {
   }, []);
   const inputs = [
     {
-      név: "Felhasználó név",
+      név: "Username",
       name: "UserName",
-      placeholder: "Név",
+      placeholder: "Username",
       type: "text",
       defaultValue: userData.UserName,
     },
@@ -99,7 +99,7 @@ const Profil = () => {
         if (!res.ok) {
           notificationHandler({
             type: "error",
-            message: "HTTP Hiba!",
+            message: "HTTP error!",
           });
           return null;
         }
@@ -111,7 +111,7 @@ const Profil = () => {
         if (data.logout) {
           notificationHandler({
             type: "warning",
-            message: "Jelentkezz be újra!",
+            message: "Please log in again!",
           });
 
           return;
@@ -134,10 +134,10 @@ const Profil = () => {
 
       .catch((error) => {
         // Ha bármilyen hiba történt a kérés során
-        console.error("Hiba történt:", error);
+        //console.error("Hiba történt:", error);
         notificationHandler({
           type: "error",
-          message: "Hiba történt:Login  " + error,
+          message: "Error:  " + error,
         });
       });
   };
@@ -145,19 +145,19 @@ const Profil = () => {
     return (
       <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-50">
         <div className="bg-white p-4 rounded-md text-black">
-          <p>Biztos módosítani akarod az adataid?</p>
+          <p>Are you sure you want to change your data?</p>
           <div className="flex justify-end mt-4">
             <button
               className="px-4 py-2 mr-2 bg-red-500 text-white rounded-md transition-colors duration-300 ease-in-out hover:bg-red-700"
               onClick={onCancel}
             >
-              Mégsem
+              No
             </button>
             <button
               className="px-4 py-2 bg-blue-500 text-white rounded-md transition-colors duration-300 ease-in-out hover:bg-blue-700"
               onClick={onConfirm}
             >
-              Igen
+              Yes
             </button>
           </div>
         </div>
@@ -168,9 +168,9 @@ const Profil = () => {
   return (
     <div>
       <div className="bg-white rounded-md shadow-md p-6 w-96 mt-2 m-auto">
-        <h1 className="text-2xl font-semibold mb-6 text-black">Profil</h1>
+        <h1 className="text-2xl font-semibold mb-6 text-black">Profile</h1>
         <p className="text-black">
-          Ha nem akarsz valamit válltoztatni valamit, akkor ne változtasd meg.
+          If you don't want to change something, don't change it.
         </p>
         <br />
         <div className="grid gap-4">
@@ -192,23 +192,23 @@ const Profil = () => {
             </div>
           ))}
           <div>
-            <p className="text-black">Új Jelszó</p>
+            <p className="text-black">New password</p>
             <input
               type="password"
               name="pass"
               ref={pass}
               className=" text-black"
-              placeholder="Jelszó"
+              placeholder="Password"
             />
           </div>
           <div>
-            <p className="text-black">Jelszó újra</p>
+            <p className="text-black">Password again</p>
             <input
               type="password"
               name="pass2"
               ref={pass2}
               className=" text-black"
-              placeholder="Jelszó"
+              placeholder="Password"
             />
           </div>
           {true && (
@@ -218,7 +218,7 @@ const Profil = () => {
                 setShowModal(true);
               }}
             >
-              Módosítás
+              Modify
             </button>
           )}
         </div>

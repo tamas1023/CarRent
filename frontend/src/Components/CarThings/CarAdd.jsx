@@ -26,23 +26,23 @@ function CarAdd(props) {
   };
 
   const inputs = [
-    { név: "Név", name: "Name", placeholder: "Az autó neve", type: "text" },
+    { név: "Car name", name: "Name", placeholder: "Car name", type: "text" },
     {
-      név: "Ára /óra (csak szám)",
+      név: "Price / hour (only number)",
       name: "Value",
-      placeholder: "Az autó ára forintban értve",
+      placeholder: "The price of the car is in HUF",
       type: "number",
     },
     {
-      név: "Leírás",
+      név: "Description",
       name: "Description",
-      placeholder: "Az autó leírása",
+      placeholder: "Car description",
       type: "text",
     },
     {
-      név: "Kép (URL), egyenlőre statikus lesz",
+      név: "Image (URL), will be static for now",
       name: "Image",
-      placeholder: "Az autó képe",
+      placeholder: "Car image",
       type: "text",
     },
   ];
@@ -69,7 +69,7 @@ function CarAdd(props) {
         if (!res.ok) {
           notificationHandler({
             type: "error",
-            message: "HTTP Hiba!",
+            message: "HTTP error!",
           });
           return null;
         }
@@ -80,7 +80,7 @@ function CarAdd(props) {
         if (data.logout) {
           notificationHandler({
             type: "warning",
-            message: "Jelentkezz be újra!",
+            message: "Please login again!",
           });
           authC.logout();
         }
@@ -100,7 +100,7 @@ function CarAdd(props) {
         // Ha bármilyen hiba történt a kérés során
         notificationHandler({
           type: "error",
-          message: "Hiba történt:" + error,
+          message: "Error: " + error,
         });
       });
     authC.setNavId(0);
@@ -114,13 +114,11 @@ function CarAdd(props) {
   return (
     <div>
       <div className="bg-white rounded-md shadow-md p-6 w-96 mt-2 m-auto">
-        <h1 className="text-2xl font-semibold mb-6 text-black">
-          Új autó hozzáadása
-        </h1>
+        <h1 className="text-2xl font-semibold mb-6 text-black">Add a car</h1>
         <div className="grid gap-4">
           {inputs.map((input) => (
             <div className="" key={input.name}>
-              {input.name === "leírás" ? (
+              {input.name === "Description" ? (
                 <div>
                   <p className="text-black">{input.név}</p>
                   <textarea
@@ -151,7 +149,7 @@ function CarAdd(props) {
                 addNewCar();
               }}
             >
-              Új autó hozzáadása
+              Add a new car
             </button>
           )}
         </div>

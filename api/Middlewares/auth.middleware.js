@@ -9,12 +9,12 @@ exports.isAuth = async (req, res, next) => {
     const { authtoken } = req.headers;
     //Token meglétének vizsgálata
     if (!authtoken) {
-      return res.send({ success: false, out: true, msg: "Hiányzó token!" });
+      return res.send({ success: false, out: true, msg: "Missing token!" });
     }
     //Token visszafejtése
     const data = await jwt.verify(authtoken, process.env.ACCESS_TOKEN_KEY);
     if (!data) {
-      return res.send({ success: false, out: true, msg: "Hibás token!" });
+      return res.send({ success: false, out: true, msg: "Invalid token!" });
     }
     //Tiltottsági vizsgálat!
     const denieds = await sequelize.query(
@@ -24,7 +24,7 @@ exports.isAuth = async (req, res, next) => {
     );
 
     if (denieds[0].length > 0) {
-      return res.send({ success: false, out: true, msg: "Token kitiltva!" });
+      return res.send({ success: false, out: true, msg: "Token Banned!" });
     }
     //Felhasználó lekérése
     const user = await Users.findOne({
@@ -38,7 +38,7 @@ exports.isAuth = async (req, res, next) => {
       return res.send({
         success: false,
         out: true,
-        msg: "A felhasználó nem található",
+        msg: "User not found!",
       });
     }
     req.body.user = user;
@@ -49,7 +49,7 @@ exports.isAuth = async (req, res, next) => {
     } else {
       return res.send({
         success: false,
-        msg: "Fatal Error! middleware " + error,
+        msg: "Fatal Error! " + error,
         logout: true,
       });
     }

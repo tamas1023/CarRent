@@ -8,7 +8,7 @@ const Footer = () => {
         <strong>
           <span> BT </span>
         </strong>
-        | Minden jog fenntartva | {import.meta.env.VITE_VERSION}v
+        | All rights reserved | {import.meta.env.VITE_VERSION}v
       </div>
     </footer>
   );

@@ -30,7 +30,7 @@ const Registration = () => {
         if (!res.ok) {
           notificationHandler({
             type: "error",
-            message: "HTTP Hiba!",
+            message: "HTTP error!",
           });
           return null;
         }
@@ -56,7 +56,7 @@ const Registration = () => {
         // Ha bármilyen hiba történt a kérés során
         notificationHandler({
           type: "error",
-          message: "Hiba történt:" + error,
+          message: "Error: " + error,
         });
       });
   };
@@ -67,7 +67,7 @@ const Registration = () => {
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 ">
             <div className="">
               <label className="block text-sm font-medium leading-6 ">
-                Felhasználónév
+                Username
               </label>
               <div className="mt-2">
                 <input
@@ -75,7 +75,7 @@ const Registration = () => {
                   name="name"
                   ref={username}
                   className="block w-full rounded-md border-0 py-1.5  shadow-sm ring-1 ring-inset ring-gray-300 text-black focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  placeholder="Felhasználónév"
+                  placeholder="Username"
                 />
               </div>
               <label className="block text-sm font-medium leading-6 ">
@@ -91,7 +91,7 @@ const Registration = () => {
                 />
               </div>
               <label className="block text-sm font-medium leading-6 ">
-                Jelszó
+                Password
               </label>
               <div className="mt-2">
                 <input
@@ -99,11 +99,11 @@ const Registration = () => {
                   name="password"
                   ref={pass}
                   className="block w-full rounded-md border-0 py-1.5  shadow-sm ring-1 ring-inset ring-gray-300 text-black focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  placeholder="Jelszó"
+                  placeholder="Password"
                 />
               </div>
               <label className="block text-sm font-medium leading-6 ">
-                Jelszó újra
+                Password again
               </label>
               <div className="mt-2">
                 <input
@@ -111,7 +111,7 @@ const Registration = () => {
                   name="password2"
                   ref={pass2}
                   className="block w-full rounded-md border-0 py-1.5  shadow-sm ring-1 ring-inset ring-gray-300 text-black focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  placeholder="Jelszó újra"
+                  placeholder="Password again"
                 />
               </div>
             </div>
@@ -122,7 +122,7 @@ const Registration = () => {
                 Reg();
               }}
             >
-              Regisztráció!
+              Registration!
             </button>
           </div>
         </div>
