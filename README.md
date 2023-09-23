@@ -29,6 +29,8 @@
 
 This webpage is running in 'Render Service' mode, so the webpage will load slowly, so wait around half to one minute. [To the webpage](https://carrent-frontend.onrender.com)
 
+If you see no cars, that is maybe because my database is currently not accessible, because I use a free database hosting service, and sometimes it is overloaded.
+
 The image changing in the profile and in cars is temporarily **disabled**, until I find a safe and reliable way to check the uploaded images.
 
 ## Key Features

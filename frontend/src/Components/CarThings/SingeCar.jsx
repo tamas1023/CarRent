@@ -201,10 +201,15 @@ function SingleCar(props) {
     SetCar((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
   const changeCar = async () => {
+    const updatedCar = {
+      ...car,
+      Image:
+        "https://upload.wikimedia.org/wikipedia/commons/c/cf/Volkswagen_Beetle_.jpg",
+    };
     if (!authC.isAdmin()) navitage("/autoKolcsonzes/Főoldal");
     await fetch(import.meta.env.VITE_API_URL + `/auth/changeCar/${id}`, {
       method: "POST",
-      body: JSON.stringify(car),
+      body: JSON.stringify(updatedCar),
       headers: {
         "Content-Type": "application/json",
         authtoken: cookies.get("authtoken") || null,
