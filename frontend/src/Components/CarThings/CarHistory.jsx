@@ -3,12 +3,18 @@ import { useState } from "react";
 import { AuthCont } from "../Services/AuthContext";
 import { NotificationCont } from "../Services/NotificationContext";
 import Cookies from "universal-cookie";
+import { useSearchParams } from "react-router-dom";
+import PaginationControlsHistory from "../Utilities/PaginationControlsHistory";
 const cookies = new Cookies();
 
 const CarHistory = () => {
   const [history, setHistory] = useState([]);
   const authC = useContext(AuthCont);
   const { notificationHandler } = useContext(NotificationCont);
+  const [searchParams, SetSearchParams] = useSearchParams({
+    page: 1,
+    per_page: 12,
+  });
   const formattedHistory = history.map((item) => {
     const formattedStartDate = new Date(item.StartDate).toLocaleString();
     const formattedEndDate = new Date(item.EndDate).toLocaleString();
@@ -55,12 +61,21 @@ const CarHistory = () => {
   useEffect(() => {
     getHistory();
   }, []);
+
+  const page = searchParams.get("page") || "1";
+  const per_page = searchParams.get("per_page") || "12";
+
+  const start = (Number(page) - 1) * Number(per_page); // 0, 5, 10 ...
+  const end = start + Number(per_page); // 5, 10, 15 ...
+
   const filteredCars = reversedDates.filter(
     (car) =>
       car.UserName.toLowerCase().includes(searchText.toLowerCase()) ||
       car.StartDate.toLowerCase().includes(searchText.toLowerCase()) ||
       car.EndDate.toLowerCase().includes(searchText.toLowerCase())
   );
+
+  const entries = filteredCars.slice(start, end);
   const handleSearch = (e) => {
     setSearchText(e.target.value);
   };
@@ -100,7 +115,7 @@ const CarHistory = () => {
         className="grid p-4"
         style={{ gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))" }}
       >
-        {filteredCars.map((car) => (
+        {entries.map((car) => (
           <div
             key={car.ID}
             className={`border-solid border-2 border-sky-700 flex flex-col rounded-lg overflow-hidden shadow-md ${
@@ -127,6 +142,11 @@ const CarHistory = () => {
           </div>
         ))}
       </div>
+      <PaginationControlsHistory
+        hasNextPage={end < filteredCars.length}
+        hasPrevPage={start > 0}
+        totalItems={filteredCars.length}
+      />
     </div>
   );
 };

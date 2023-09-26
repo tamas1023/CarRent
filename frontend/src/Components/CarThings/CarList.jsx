@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useEffect, useState } from "react";
 import { useRef } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { AuthCont } from "../Services/AuthContext";
 import { useContext } from "react";
 import Loading from "../Loading/Loading";
@@ -10,10 +10,17 @@ function CarList(props) {
   const authC = useContext(AuthCont);
   const [loading, setLoading] = useState(true);
   const [cars, setCars] = useState([]);
-
   const [searchText, setSearchText] = useState("");
+  const [searchParams, SetSearchParams] = useSearchParams({
+    page: 1,
+    per_page: 9,
+  });
   const handleSearch = (e) => {
     setSearchText(e.target.value);
+    SetSearchParams({
+      page: 1,
+      per_page: 9,
+    });
   };
 
   return (
@@ -48,13 +55,12 @@ function CarList(props) {
           </button>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-        {
-          <Suspense fallback={<Loading />}>
-            <Cars searchText={searchText} />
-          </Suspense>
-        }
-      </div>
+
+      {
+        <Suspense fallback={<Loading />}>
+          <Cars searchText={searchText} />
+        </Suspense>
+      }
     </div>
   );
 }
