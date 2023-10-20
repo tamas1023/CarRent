@@ -24,6 +24,7 @@
 [![Express](https://custom-icon-badges.demolab.com/badge/-Express-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
 [![MySQL](https://custom-icon-badges.demolab.com/badge/-MySQL-2156ab?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![Powered by Render](https://custom-icon-badges.demolab.com/badge/-Powered_by_Render-2ca544?style=for-the-badge&logo=render&logoColor=white)](https://render.com/)
+[![Sequelize](https://custom-icon-badges.demolab.com/badge/-Sequelize-000000?style=for-the-badge&logo=sequelize&logoColor=white)](https://sequelize.org)
 
 ## Key Features
 
